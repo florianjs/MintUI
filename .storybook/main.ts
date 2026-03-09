@@ -1,4 +1,5 @@
-import type { StorybookConfig } from '@storybook-vue/nuxt';
+import type { StorybookConfig } from '@storybook/vue3-vite';
+import vue from '@vitejs/plugin-vue';
 
 const config: StorybookConfig = {
   stories: [
@@ -10,6 +11,11 @@ const config: StorybookConfig = {
     '@storybook/addon-docs',
     '@storybook/addon-themes',
   ],
-  framework: '@storybook-vue/nuxt',
+  framework: '@storybook/vue3-vite',
+  viteFinal(config) {
+    config.plugins = config.plugins || [];
+    config.plugins.push(vue());
+    return config;
+  },
 };
 export default config;
