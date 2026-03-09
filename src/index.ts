@@ -26,3 +26,11 @@ export { default as UiSwitch } from '../app/components/Ui/Switch.vue';
 
 // Separator
 export { default as UiSeparator } from '../app/components/Ui/Separator.vue';
+
+// Navbar
+export { default as UiNavbar } from '../app/components/Ui/Navbar.vue';
+export { default as UiNavbarBrand } from '../app/components/Ui/NavbarBrand.vue';
+export { default as UiNavbarMenu } from '../app/components/Ui/NavbarMenu.vue';
+export { default as UiNavbarItem } from '../app/components/Ui/NavbarItem.vue';
+export { default as UiNavbarToggle } from '../app/components/Ui/NavbarToggle.vue';
+export { default as UiNavbarCentered } from '../app/components/Ui/NavbarCentered.vue';

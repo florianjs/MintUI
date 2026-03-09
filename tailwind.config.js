@@ -12,6 +12,8 @@ export default {
     './app/app.{js,ts,vue}',
     './app/Error.{js,ts,vue}',
     './app/error.{js,ts,vue}',
+    './.storybook/**/*.{js,ts,vue}',
+    './app/**/*.stories.{js,ts,vue,mdx}',
   ],
   theme: {
     extend: {
