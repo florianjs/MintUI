@@ -41,3 +41,19 @@ export { default as UiNavBarDropdownSeparator } from '../app/components/Ui/NavBa
 export { default as UiHeroCentric } from '../app/components/Ui/HeroCentric.vue';
 export { default as UiHeroSplit } from '../app/components/Ui/HeroSplit.vue';
 export { default as UiHeroGlow } from '../app/components/Ui/HeroGlow.vue';
+
+// Dashboard Layout
+export { default as UiDashLayout } from '../app/components/Ui/DashLayout.vue';
+export { default as UiDashSidebar } from '../app/components/Ui/DashSidebar.vue';
+export { default as UiDashNavbar } from '../app/components/Ui/DashNavbar.vue';
+export { default as UiDashContent } from '../app/components/Ui/DashContent.vue';
+
+// Accordion & FAQ
+export { default as UiAccordion } from '../app/components/Ui/Accordion.vue';
+export { default as UiFaq } from '../app/components/Ui/Faq.vue';
+
+// Pricing
+export { default as UiPricingCard } from '../app/components/Ui/PricingCard.vue';
+
+// Alert
+export { default as UiAlert } from '../app/components/Ui/Alert.vue';
