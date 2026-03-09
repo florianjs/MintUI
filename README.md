@@ -1,28 +1,24 @@
-# MintUI
+# 🌿 MintUI
 
-A compact, modern UI component library for **Nuxt 4 + TailwindCSS** with light and dark mode support.
+Stop burning tokens. Build faster.
+
+MintUI isn’t just another UI kit. It’s a productivity framework for Nuxt 4 + TailwindCSS, engineered to be as light on your codebase as it is on your LLM budget.
+
+## Why MintUI?
+
+- Token-Efficient: Building frontends from scratch drains your AI credits. MintUI provides a rock-solid foundation that your AI (Copilot, Claude, Cursor) understands instantly through its built-in MCP server.
+
+- The "White-Label" Starter: Use it out of the box, or gut it to launch your own NPM library in minutes—with Storybook and OIDC publishing already wired up.
+
+- Opinionated UX: My personal component set. Compact, modern, and zero-fluff. Built for devs who want to ship, not fiddle with CSS variables all day.
 
 > Less is more — focused on UX.
-
-## Components
-
-| Component     | Variants                                                              |
-| ------------- | --------------------------------------------------------------------- |
-| **Button**    | default, destructive, outline, secondary, ghost, link · sm, lg, icon  |
-| **Input**     | text, email, password, number, search, tel, url                       |
-| **Badge**     | default, secondary, destructive, outline                              |
-| **Card**      | Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter |
-| **Avatar**    | sm, default, lg · image or fallback initials                          |
-| **Switch**    | on/off toggle with disabled state                                     |
-| **Separator** | horizontal, vertical                                                  |
 
 ## Installation
 
 ```bash
 npm install mintui
 ```
-
-### Nuxt (recommended)
 
 Add the module to your `nuxt.config.ts`:
 
@@ -39,13 +35,6 @@ Components are auto-imported with the `Ui` prefix. CSS is injected automatically
   <UiButton variant="outline">Click me</UiButton>
   <UiBadge variant="secondary">New</UiBadge>
 </template>
-```
-
-### Vue (standalone)
-
-```ts
-import { UiButton, UiBadge } from 'mintui';
-import 'mintui/style.css';
 ```
 
 ## Dark Mode
