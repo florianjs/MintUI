@@ -7,6 +7,11 @@ const preview: Preview = {
     docs: {
       source: {
         type: 'dynamic',
+        transform: (src: string) => {
+          // Storybook uses Vue's __name (filename stem) for autodocs source generation.
+          // This transform adds the Ui prefix to all PascalCase component tags.
+          return src.replace(/<(\/?)((?!Ui)[A-Z][a-zA-Z]*)/g, '<$1Ui$2');
+        },
       },
     },
     controls: {
