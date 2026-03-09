@@ -36,6 +36,8 @@ export { default as UiNavBarItem } from '../app/components/Ui/NavbarItem.vue';
 export { default as UiNavBarAvatar } from '../app/components/Ui/NavBarAvatar.vue';
 export { default as UiNavBarDropdownItem } from '../app/components/Ui/NavBarDropdownItem.vue';
 export { default as UiNavBarDropdownSeparator } from '../app/components/Ui/NavBarDropdownSeparator.vue';
+export { default as UiNavbarFloating } from '../app/components/Ui/NavbarFloating.vue';
+export { default as UiNavbarMorph } from '../app/components/Ui/NavbarMorph.vue';
 
 // Hero Sections
 export { default as UiHeroCentric } from '../app/components/Ui/HeroCentric.vue';
