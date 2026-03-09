@@ -6,7 +6,7 @@ const preview: Preview = {
   parameters: {
     docs: {
       source: {
-        type: 'code',
+        type: 'dynamic',
       },
     },
     controls: {

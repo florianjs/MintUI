@@ -20,6 +20,13 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const WithImage: Story = {
+  render: (args) => ({
+    components: { UiAvatar },
+    setup() {
+      return { args };
+    },
+    template: '<UiAvatar v-bind="args" />',
+  }),
   args: {
     src: 'https://i.pravatar.cc/150?u=storybook',
     alt: 'John Doe',
@@ -28,6 +35,13 @@ export const WithImage: Story = {
 };
 
 export const Fallback: Story = {
+  render: (args) => ({
+    components: { UiAvatar },
+    setup() {
+      return { args };
+    },
+    template: '<UiAvatar v-bind="args" />',
+  }),
   args: {
     alt: 'John Doe',
     size: 'default',
@@ -35,6 +49,13 @@ export const Fallback: Story = {
 };
 
 export const CustomFallback: Story = {
+  render: (args) => ({
+    components: { UiAvatar },
+    setup() {
+      return { args };
+    },
+    template: '<UiAvatar v-bind="args" />',
+  }),
   args: {
     fallback: 'AB',
     size: 'default',
@@ -42,6 +63,13 @@ export const CustomFallback: Story = {
 };
 
 export const Small: Story = {
+  render: (args) => ({
+    components: { UiAvatar },
+    setup() {
+      return { args };
+    },
+    template: '<UiAvatar v-bind="args" />',
+  }),
   args: {
     src: 'https://i.pravatar.cc/150?u=small',
     alt: 'Small Avatar',
@@ -50,6 +78,13 @@ export const Small: Story = {
 };
 
 export const Large: Story = {
+  render: (args) => ({
+    components: { UiAvatar },
+    setup() {
+      return { args };
+    },
+    template: '<UiAvatar v-bind="args" />',
+  }),
   args: {
     src: 'https://i.pravatar.cc/150?u=large',
     alt: 'Large Avatar',

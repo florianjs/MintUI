@@ -19,12 +19,26 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+  render: (args) => ({
+    components: { UiInput },
+    setup() {
+      return { args };
+    },
+    template: '<UiInput v-bind="args" />',
+  }),
   args: {
     placeholder: 'Enter text...',
   },
 };
 
 export const Email: Story = {
+  render: (args) => ({
+    components: { UiInput },
+    setup() {
+      return { args };
+    },
+    template: '<UiInput v-bind="args" />',
+  }),
   args: {
     type: 'email',
     placeholder: 'you@example.com',
@@ -32,6 +46,13 @@ export const Email: Story = {
 };
 
 export const Password: Story = {
+  render: (args) => ({
+    components: { UiInput },
+    setup() {
+      return { args };
+    },
+    template: '<UiInput v-bind="args" />',
+  }),
   args: {
     type: 'password',
     placeholder: 'Password',
@@ -39,6 +60,13 @@ export const Password: Story = {
 };
 
 export const Disabled: Story = {
+  render: (args) => ({
+    components: { UiInput },
+    setup() {
+      return { args };
+    },
+    template: '<UiInput v-bind="args" />',
+  }),
   args: {
     placeholder: 'Disabled input',
     disabled: true,
