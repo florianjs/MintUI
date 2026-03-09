@@ -3,7 +3,7 @@ defineOptions({ name: 'UiCardTitle' });
 </script>
 
 <template>
-  <h3 class="text-lg font-semibold leading-none tracking-tight">
+  <h3 class="text-xl font-semibold leading-tight tracking-tight">
     <slot />
   </h3>
 </template>

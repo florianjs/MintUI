@@ -3,7 +3,7 @@ defineOptions({ name: 'UiCardFooter' });
 </script>
 
 <template>
-  <div class="flex items-center p-6 pt-0">
+  <div class="flex items-center gap-3 p-6 pt-0">
     <slot />
   </div>
 </template>

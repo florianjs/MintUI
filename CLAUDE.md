@@ -70,3 +70,20 @@ When adding a new component `Foo`:
 2. Add `export { default as UiFoo } from '../app/components/Ui/Foo.vue'` to `src/index.ts`.
 3. Create `app/components/Ui/Foo.stories.ts`.
 4. Create `app/components/Ui/Foo.test.ts`.
+
+## Troubleshooting
+
+**Before investigating any issue, check `docs/troubleshooting/` first** — past problems and their root causes are documented there.
+
+### Documenting new issues
+
+After solving a non-trivial problem, create a file in `docs/troubleshooting/` using a kebab-case name describing the symptom (e.g. `vitest-duplicate-vue-plugin-storybook.md`).
+
+Follow the template and conventions defined in **`AGENTS.md` section 15** (the authoritative reference for format, required fields, and examples). Every document must include:
+
+- **Preamble:** date (`YYYY-MM-DD`), files affected, git commit reference (`git log --oneline -1`)
+- **User story:** as a / I want to / so that
+- **Problem description:** error output, steps to reproduce
+- **Root cause:** why it happened
+- **Solution:** what changed and why it works (with code examples)
+- **Prevention:** how to avoid it in the future

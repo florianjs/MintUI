@@ -17,6 +17,7 @@ export { default as UiCardTitle } from '../app/components/Ui/CardTitle.vue';
 export { default as UiCardDescription } from '../app/components/Ui/CardDescription.vue';
 export { default as UiCardContent } from '../app/components/Ui/CardContent.vue';
 export { default as UiCardFooter } from '../app/components/Ui/CardFooter.vue';
+export { default as UiCardImage } from '../app/components/Ui/CardImage.vue';
 
 // Avatar
 export { default as UiAvatar } from '../app/components/Ui/Avatar.vue';
@@ -35,3 +36,8 @@ export { default as UiNavBarItem } from '../app/components/Ui/NavbarItem.vue';
 export { default as UiNavBarAvatar } from '../app/components/Ui/NavBarAvatar.vue';
 export { default as UiNavBarDropdownItem } from '../app/components/Ui/NavBarDropdownItem.vue';
 export { default as UiNavBarDropdownSeparator } from '../app/components/Ui/NavBarDropdownSeparator.vue';
+
+// Hero Sections
+export { default as UiHeroCentric } from '../app/components/Ui/HeroCentric.vue';
+export { default as UiHeroSplit } from '../app/components/Ui/HeroSplit.vue';
+export { default as UiHeroGlow } from '../app/components/Ui/HeroGlow.vue';

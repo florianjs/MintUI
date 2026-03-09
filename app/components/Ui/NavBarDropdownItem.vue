@@ -36,6 +36,7 @@ const itemClasses = computed(() => {
 
 const handleClick = (event: MouseEvent) => {
   if (props.disabled) return;
+  event.preventDefault();
   emit('click', event);
 };
 </script>
