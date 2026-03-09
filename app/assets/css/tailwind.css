@@ -75,3 +75,41 @@
     color: hsl(var(--foreground));
   }
 }
+
+/* ApexCharts Tweaks for MintUI */
+@layer components {
+  /* Tooltip Glass/Card look */
+  .apexcharts-tooltip {
+    @apply bg-card text-card-foreground border border-border shadow-xl rounded-xl !important;
+    backdrop-filter: blur(12px);
+  }
+  .apexcharts-tooltip-title {
+    @apply border-b border-border bg-muted/50 font-semibold px-3 py-2 text-sm !important;
+  }
+  .apexcharts-tooltip-series-group {
+    @apply px-3 py-1 !important;
+  }
+  .apexcharts-tooltip-text-y-value {
+    @apply font-bold ml-2 text-foreground !important;
+  }
+  .apexcharts-tooltip-text-y-label {
+    @apply text-muted-foreground !important;
+  }
+  /* Remove ugly selection rects */
+  .apexcharts-selection-rect {
+    @apply fill-primary/10 stroke-primary border-dashed !important;
+  }
+  .apexcharts-gridline {
+    stroke-dasharray: 4;
+  }
+  /* Donut/Pie text center */
+  .apexcharts-datalabel-value {
+    @apply fill-foreground font-bold !important;
+  }
+  .apexcharts-datalabel-label {
+    @apply fill-muted-foreground font-medium !important;
+  }
+  .apexcharts-legend-text {
+    @apply text-muted-foreground font-medium !important;
+  }
+}

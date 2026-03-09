@@ -57,3 +57,6 @@ export { default as UiPricingCard } from '../app/components/Ui/PricingCard.vue';
 
 // Alert
 export { default as UiAlert } from '../app/components/Ui/Alert.vue';
+
+// Chart
+export { default as UiChart } from '../app/components/Ui/Chart/Chart.vue';
