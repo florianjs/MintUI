@@ -10,12 +10,14 @@ const props = defineProps<{
 }>()
 
 const activeTab = ref<'preview' | 'code'>('preview')
-const activeExample = ref(0)
 const isDark = inject<Ref<boolean>>('previewDark', ref(false))
 
+const previewContainer = ref<HTMLElement | null>(null)
 const previewHeight = ref(300)
+const previewWidth = ref<number | null>(null) // null = flex-1 (pleine largeur)
 
-function startResize(e: MouseEvent) {
+function startResizeHeight(e: MouseEvent) {
+  e.preventDefault()
   const startY = e.clientY
   const startH = previewHeight.value
   function onMove(ev: MouseEvent) {
@@ -27,6 +29,26 @@ function startResize(e: MouseEvent) {
   }
   window.addEventListener('mousemove', onMove)
   window.addEventListener('mouseup', onUp)
+}
+
+function startResizeWidth(e: MouseEvent) {
+  e.preventDefault()
+  const startX = e.clientX
+  const startW = previewWidth.value ?? (previewContainer.value!.offsetWidth - 10)
+  function onMove(ev: MouseEvent) {
+    const cw = previewContainer.value!.offsetWidth
+    previewWidth.value = Math.min(cw - 10, Math.max(280, startW + ev.clientX - startX))
+  }
+  function onUp() {
+    window.removeEventListener('mousemove', onMove)
+    window.removeEventListener('mouseup', onUp)
+  }
+  window.addEventListener('mousemove', onMove)
+  window.addEventListener('mouseup', onUp)
+}
+
+function resetWidth() {
+  previewWidth.value = null
 }
 </script>
 
@@ -44,7 +66,7 @@ function startResize(e: MouseEvent) {
     <!-- Preview / Code tabs -->
     <div class="rounded-xl border border-border overflow-hidden">
       <!-- Tab bar -->
-      <div class="flex border-b border-border bg-muted/30">
+      <div class="flex items-center border-b border-border bg-muted/30">
         <button
           @click="activeTab = 'preview'"
           :class="[
@@ -67,17 +89,37 @@ function startResize(e: MouseEvent) {
         >
           Code démo
         </button>
+        <!-- Width indicator + reset -->
+        <div v-if="activeTab === 'preview' && previewWidth !== null" class="ml-auto flex items-center gap-2 pr-3">
+          <span class="text-xs text-muted-foreground font-mono">{{ previewWidth }}px</span>
+          <button @click="resetWidth" class="text-xs text-muted-foreground hover:text-foreground transition-colors">↔ reset</button>
+        </div>
       </div>
 
       <!-- Preview pane -->
       <div
         v-show="activeTab === 'preview'"
-        :class="isDark ? 'dark' : ''"
+        ref="previewContainer"
         :style="{ height: previewHeight + 'px' }"
-        class="p-8 bg-background overflow-auto flex items-start justify-start"
+        class="flex overflow-hidden"
       >
-        <component :is="demoComponent" v-if="demoComponent" />
-        <div v-else class="text-muted-foreground text-sm">Démo non disponible</div>
+        <!-- Content -->
+        <div
+          :class="[isDark ? 'dark' : '', previewWidth !== null ? 'shrink-0' : 'flex-1']"
+          :style="previewWidth !== null ? { width: previewWidth + 'px' } : {}"
+          class="h-full overflow-auto bg-background p-8 flex items-start justify-start"
+        >
+          <component :is="demoComponent" v-if="demoComponent" />
+          <div v-else class="text-muted-foreground text-sm">Démo non disponible</div>
+        </div>
+
+        <!-- Right resize handle -->
+        <div
+          @mousedown="startResizeWidth"
+          class="w-2.5 h-full cursor-col-resize flex items-center justify-center group shrink-0 border-l border-border bg-muted/20 hover:bg-primary/10 transition-colors"
+        >
+          <div class="w-px h-8 rounded-full bg-muted-foreground/30 group-hover:bg-primary/50 transition-colors"></div>
+        </div>
       </div>
 
       <!-- Code pane -->
@@ -86,10 +128,10 @@ function startResize(e: MouseEvent) {
       </div>
     </div>
 
-    <!-- Resize handle -->
+    <!-- Bottom resize handle -->
     <div
       v-if="activeTab === 'preview'"
-      @mousedown="startResize"
+      @mousedown="startResizeHeight"
       class="flex items-center justify-center h-4 -mt-4 cursor-row-resize group select-none"
     >
       <div class="w-12 h-1 rounded-full bg-muted-foreground/20 group-hover:bg-muted-foreground/50 transition-colors"></div>

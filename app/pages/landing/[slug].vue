@@ -28,9 +28,12 @@ const usageCode = computed(() => codeMap[slug.value] ?? '')
 const fullscreen = ref(false)
 const isDark = inject<Ref<boolean>>('previewDark', ref(false))
 
+const previewContainer = ref<HTMLElement | null>(null)
 const previewHeight = ref(600)
+const previewWidth = ref<number | null>(null)
 
-function startResize(e: MouseEvent) {
+function startResizeHeight(e: MouseEvent) {
+  e.preventDefault()
   const startY = e.clientY
   const startH = previewHeight.value
   function onMove(ev: MouseEvent) {
@@ -42,6 +45,26 @@ function startResize(e: MouseEvent) {
   }
   window.addEventListener('mousemove', onMove)
   window.addEventListener('mouseup', onUp)
+}
+
+function startResizeWidth(e: MouseEvent) {
+  e.preventDefault()
+  const startX = e.clientX
+  const startW = previewWidth.value ?? (previewContainer.value!.offsetWidth - 10)
+  function onMove(ev: MouseEvent) {
+    const cw = previewContainer.value!.offsetWidth
+    previewWidth.value = Math.min(cw - 10, Math.max(320, startW + ev.clientX - startX))
+  }
+  function onUp() {
+    window.removeEventListener('mousemove', onMove)
+    window.removeEventListener('mouseup', onUp)
+  }
+  window.addEventListener('mousemove', onMove)
+  window.addEventListener('mouseup', onUp)
+}
+
+function resetWidth() {
+  previewWidth.value = null
 }
 </script>
 
@@ -101,19 +124,36 @@ function startResize(e: MouseEvent) {
             <div class="h-3 w-3 rounded-full bg-green-400/60"></div>
           </div>
           <span class="text-xs text-muted-foreground font-mono flex-1 text-center">Aperçu</span>
+          <div v-if="previewWidth !== null" class="flex items-center gap-2">
+            <span class="text-xs text-muted-foreground font-mono">{{ previewWidth }}px</span>
+            <button @click="resetWidth" class="text-xs text-muted-foreground hover:text-foreground transition-colors">↔ reset</button>
+          </div>
         </div>
         <div
-          :class="isDark ? 'dark' : ''"
+          ref="previewContainer"
           :style="{ height: previewHeight + 'px' }"
-          class="overflow-auto bg-background"
+          class="flex overflow-hidden"
         >
-          <component :is="landingComponent" v-if="landingComponent" />
+          <div
+            :class="[isDark ? 'dark' : '', previewWidth !== null ? 'shrink-0' : 'flex-1']"
+            :style="previewWidth !== null ? { width: previewWidth + 'px' } : {}"
+            class="h-full overflow-auto bg-background"
+          >
+            <component :is="landingComponent" v-if="landingComponent" />
+          </div>
+          <!-- Right resize handle -->
+          <div
+            @mousedown="startResizeWidth"
+            class="w-2.5 h-full cursor-col-resize flex items-center justify-center group shrink-0 border-l border-border bg-muted/20 hover:bg-primary/10 transition-colors"
+          >
+            <div class="w-px h-8 rounded-full bg-muted-foreground/30 group-hover:bg-primary/50 transition-colors"></div>
+          </div>
         </div>
       </div>
 
-      <!-- Resize handle -->
+      <!-- Bottom resize handle -->
       <div
-        @mousedown="startResize"
+        @mousedown="startResizeHeight"
         class="flex items-center justify-center h-4 mb-4 cursor-row-resize group select-none"
       >
         <div class="w-12 h-1 rounded-full bg-muted-foreground/20 group-hover:bg-muted-foreground/50 transition-colors"></div>
