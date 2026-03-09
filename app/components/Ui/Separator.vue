@@ -1,4 +1,6 @@
 <script setup lang="ts">
+defineOptions({ name: 'UiSeparator' });
+
 interface Props {
   orientation?: 'horizontal' | 'vertical';
 }

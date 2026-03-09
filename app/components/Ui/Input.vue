@@ -1,4 +1,6 @@
 <script setup lang="ts">
+defineOptions({ name: 'UiInput' });
+
 interface Props {
   type?: string;
   placeholder?: string;

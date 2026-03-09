@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 
+defineOptions({ name: 'UiAvatar' });
+
 type AvatarSize = 'sm' | 'default' | 'lg';
 
 interface Props {

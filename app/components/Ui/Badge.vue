@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
+defineOptions({ name: 'UiBadge' });
+
 type BadgeVariant = 'default' | 'secondary' | 'destructive' | 'outline';
 
 interface Props {

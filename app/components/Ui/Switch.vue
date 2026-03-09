@@ -1,4 +1,6 @@
 <script setup lang="ts">
+defineOptions({ name: 'UiSwitch' });
+
 interface Props {
   modelValue?: boolean;
   disabled?: boolean;
