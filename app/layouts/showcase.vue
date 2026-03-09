@@ -1,21 +1,13 @@
 <script setup lang="ts">
 import { ref, watch, provide } from 'vue'
 import { useLocalStorage } from '@vueuse/core'
-import { useRoute } from 'vue-router'
 
 const isPinned = useLocalStorage('showcase-sidebar-pinned', true)
 const sidebarOpen = ref(isPinned.value)
 const isDark = useLocalStorage('showcase-preview-dark', false)
-const route = useRoute()
 
 provide('previewDark', isDark)
 
-// Auto-close sidebar when unpinned and navigating
-watch(() => route.path, () => {
-  if (!isPinned.value) sidebarOpen.value = false
-})
-
-// Sync with pin state
 watch(isPinned, (val) => {
   sidebarOpen.value = val
 })
