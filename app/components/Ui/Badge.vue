@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { computed } from 'vue';
+
 type BadgeVariant = 'default' | 'secondary' | 'destructive' | 'outline';
 
 interface Props {

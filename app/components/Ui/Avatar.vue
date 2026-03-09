@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { ref, computed } from 'vue';
+
 type AvatarSize = 'sm' | 'default' | 'lg';
 
 interface Props {
