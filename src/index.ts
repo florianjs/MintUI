@@ -27,10 +27,11 @@ export { default as UiSwitch } from '../app/components/Ui/Switch.vue';
 // Separator
 export { default as UiSeparator } from '../app/components/Ui/Separator.vue';
 
-// Navbar
-export { default as UiNavbar } from '../app/components/Ui/Navbar.vue';
-export { default as UiNavbarBrand } from '../app/components/Ui/NavbarBrand.vue';
-export { default as UiNavbarMenu } from '../app/components/Ui/NavbarMenu.vue';
-export { default as UiNavbarItem } from '../app/components/Ui/NavbarItem.vue';
-export { default as UiNavbarToggle } from '../app/components/Ui/NavbarToggle.vue';
-export { default as UiNavbarCentered } from '../app/components/Ui/NavbarCentered.vue';
+// NavBar
+export { default as UiNavBar } from '../app/components/Ui/Navbar.vue';
+export { default as UiNavBarBrand } from '../app/components/Ui/NavbarBrand.vue';
+export { default as UiNavBarMenu } from '../app/components/Ui/NavbarMenu.vue';
+export { default as UiNavBarItem } from '../app/components/Ui/NavbarItem.vue';
+export { default as UiNavBarAvatar } from '../app/components/Ui/NavBarAvatar.vue';
+export { default as UiNavBarDropdownItem } from '../app/components/Ui/NavBarDropdownItem.vue';
+export { default as UiNavBarDropdownSeparator } from '../app/components/Ui/NavBarDropdownSeparator.vue';

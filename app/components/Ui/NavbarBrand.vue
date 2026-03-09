@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, inject } from 'vue';
 
-defineOptions({ name: 'UiNavbarBrand' });
+defineOptions({ name: 'UiNavBarBrand' });
 
 interface Props {
   href?: string;

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, inject } from 'vue';
 
-defineOptions({ name: 'UiNavbarMenu' });
+defineOptions({ name: 'UiNavBarMenu' });
 
 interface Props {
   mobile?: boolean;
