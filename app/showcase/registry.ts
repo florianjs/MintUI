@@ -1,6 +1,14 @@
 import UiButton from '~/components/Ui/Button.vue';
 import UiAlert from '~/components/Ui/Alert.vue';
 import UiBadge from '~/components/Ui/Badge.vue';
+import UiAvatar from '~/components/Ui/Avatar.vue';
+import UiSeparator from '~/components/Ui/Separator.vue';
+import UiSwitch from '~/components/Ui/Switch.vue';
+import UiAccordion from '~/components/Ui/Accordion.vue';
+import UiInput from '~/components/Ui/Input.vue';
+import UiCard from '~/components/Ui/Card.vue';
+import UiPricingCard from '~/components/Ui/PricingCard.vue';
+import UiStat from '~/components/Ui/Stat/Stat.vue';
 
 export type Example = {
   title: string;
@@ -237,31 +245,90 @@ export const components: ComponentEntry[] = [
     name: 'Avatar',
     group: 'Primitives',
     description: 'Avatar with image, initials fallback and 3 sizes.',
-    examples: [
+    componentName: 'UiAvatar',
+    component: UiAvatar,
+    controls: [
       {
-        title: 'With image',
+        prop: 'src',
+        label: 'Image URL',
+        type: 'text',
+        default: 'https://github.com/github.png',
+      },
+      {
+        prop: 'alt',
+        label: 'Alt text',
+        type: 'text',
+        default: 'GitHub',
+      },
+      {
+        prop: 'fallback',
+        label: 'Fallback initials',
+        type: 'text',
+        default: '',
+      },
+      {
+        prop: 'size',
+        type: 'select',
+        options: ['sm', 'default', 'lg'],
+        default: 'default',
+      },
+    ],
+    stories: [
+      {
+        title: 'Default',
+        props: { src: 'https://github.com/github.png', alt: 'GitHub' },
         code: `<UiAvatar src="https://github.com/github.png" alt="GitHub" />`,
       },
       {
-        title: 'Initials fallback',
-        code: `<UiAvatar fallback="FJ" size="sm" />
-<UiAvatar fallback="FJ" />
-<UiAvatar fallback="FJ" size="lg" />`,
+        title: 'Small',
+        props: {
+          src: 'https://github.com/github.png',
+          alt: 'GitHub',
+          size: 'sm',
+        },
+        code: `<UiAvatar src="https://github.com/github.png" alt="GitHub" size="sm" />`,
+      },
+      {
+        title: 'Large',
+        props: {
+          src: 'https://github.com/github.png',
+          alt: 'GitHub',
+          size: 'lg',
+        },
+        code: `<UiAvatar src="https://github.com/github.png" alt="GitHub" size="lg" />`,
+      },
+      {
+        title: 'Fallback',
+        props: { fallback: 'JD', alt: 'John Doe' },
+        code: `<UiAvatar fallback="JD" alt="John Doe" />`,
       },
     ],
+    examples: [],
   },
   {
     slug: 'separator',
     name: 'Separator',
     group: 'Primitives',
     description: 'Horizontal or vertical separator line.',
-    examples: [
+    componentName: 'UiSeparator',
+    component: UiSeparator,
+    controls: [
       {
-        title: 'Horizontal',
+        prop: 'orientation',
+        type: 'select',
+        options: ['horizontal', 'vertical'],
+        default: 'horizontal',
+      },
+    ],
+    stories: [
+      {
+        title: 'Default',
+        props: { orientation: 'horizontal' },
         code: `<UiSeparator />`,
       },
       {
         title: 'Vertical',
+        props: { orientation: 'vertical' },
         code: `<div class="flex h-8 items-center gap-4">
   <span>Left</span>
   <UiSeparator orientation="vertical" />
@@ -269,18 +336,142 @@ export const components: ComponentEntry[] = [
 </div>`,
       },
     ],
+    examples: [],
   },
   {
     slug: 'switch',
     name: 'Switch',
     group: 'Primitives',
     description: 'Toggle on/off with optional label.',
-    examples: [
+    componentName: 'UiSwitch',
+    component: UiSwitch,
+    controls: [
+      { prop: 'modelValue', label: 'Checked', type: 'boolean', default: false },
+      { prop: 'disabled', type: 'boolean', default: false },
+    ],
+    stories: [
       {
-        title: 'Basic',
-        code: `<UiSwitch label="Enable notifications" />`,
+        title: 'Default',
+        props: { modelValue: false },
+        code: `<UiSwitch />`,
+      },
+      {
+        title: 'Checked',
+        props: { modelValue: true },
+        code: `<UiSwitch :model-value="true" />`,
+      },
+      {
+        title: 'Disabled',
+        props: { disabled: true },
+        code: `<UiSwitch :disabled="true" />`,
       },
     ],
+    examples: [],
+  },
+  {
+    slug: 'card',
+    name: 'Card',
+    group: 'Primitives',
+    description: 'Content card with composable header, body and footer.',
+    componentName: 'UiCard',
+    component: UiCard,
+    controls: [
+      {
+        prop: 'variant',
+        type: 'select',
+        options: ['default', 'elevated', 'outline', 'glass', 'gradient'],
+        default: 'default',
+      },
+      { prop: 'interactive', type: 'boolean', default: false },
+    ],
+    stories: [
+      {
+        title: 'Default',
+        props: { variant: 'default' },
+        code: `<UiCard>
+  <UiCardHeader>
+    <UiCardTitle>Card Title</UiCardTitle>
+    <UiCardDescription>Short description.</UiCardDescription>
+  </UiCardHeader>
+  <UiCardContent>
+    <p>Card content goes here.</p>
+  </UiCardContent>
+</UiCard>`,
+      },
+      {
+        title: 'Elevated',
+        props: { variant: 'elevated' },
+        code: `<UiCard variant="elevated">
+  <UiCardHeader>
+    <UiCardTitle>Elevated Card</UiCardTitle>
+  </UiCardHeader>
+  <UiCardContent>
+    <p>With shadow effect.</p>
+  </UiCardContent>
+</UiCard>`,
+      },
+      {
+        title: 'Outline',
+        props: { variant: 'outline' },
+        code: `<UiCard variant="outline">
+  <UiCardHeader>
+    <UiCardTitle>Outline Card</UiCardTitle>
+  </UiCardHeader>
+</UiCard>`,
+      },
+      {
+        title: 'Interactive',
+        props: { interactive: true },
+        code: `<UiCard :interactive="true">
+  <UiCardHeader>
+    <UiCardTitle>Clickable Card</UiCardTitle>
+  </UiCardHeader>
+</UiCard>`,
+      },
+    ],
+    examples: [],
+  },
+  {
+    slug: 'pricing-card',
+    name: 'PricingCard',
+    group: 'Primitives',
+    description: 'Ready-to-use pricing card.',
+    componentName: 'UiPricingCard',
+    component: UiPricingCard,
+    controls: [
+      { prop: 'title', type: 'text', default: 'Pro' },
+      { prop: 'price', type: 'text', default: '$29' },
+      { prop: 'description', type: 'text', default: 'For growing teams' },
+      {
+        prop: 'isPopular',
+        label: 'Popular badge',
+        type: 'boolean',
+        default: false,
+      },
+    ],
+    stories: [
+      {
+        title: 'Default',
+        props: {
+          title: 'Starter',
+          price: '$9',
+          description: 'For small projects',
+        },
+        code: `<UiPricingCard title="Starter" price="$9" description="For small projects" />`,
+      },
+      {
+        title: 'Popular',
+        props: {
+          title: 'Pro',
+          price: '$29',
+          description: 'For growing teams',
+          isPopular: true,
+        },
+        code: `<UiPricingCard title="Pro" price="$29" description="For growing teams" :is-popular="true" />`,
+      },
+    ],
+    examples: [],
+    previewHeight: 400,
   },
   {
     slug: 'alert',
@@ -294,7 +485,7 @@ export const components: ComponentEntry[] = [
       {
         prop: 'description',
         type: 'text',
-        default: 'Un message important à afficher.',
+        default: 'Important information to display.',
       },
       {
         prop: 'variant',
@@ -344,76 +535,134 @@ export const components: ComponentEntry[] = [
     name: 'Accordion',
     group: 'Feedback',
     description: 'Collapsible panel with smooth animation.',
-    examples: [
+    componentName: 'UiAccordion',
+    component: UiAccordion,
+    controls: [
+      { prop: 'title', type: 'text', default: 'Question?' },
       {
-        title: 'Basic',
-        code: `<UiAccordion title="How to install MintUI?">
-  Install via npm: <code>npm install @florianjs/mintui</code>
-</UiAccordion>
-<UiAccordion title="Does it support dark mode?">
-  Yes, add the <code>dark</code> class to an ancestor element.
+        prop: 'defaultOpen',
+        label: 'Open by default',
+        type: 'boolean',
+        default: false,
+      },
+    ],
+    stories: [
+      {
+        title: 'Default',
+        props: { title: 'What is MintUI?' },
+        slot: 'A modern UI component library.',
+        code: `<UiAccordion title="What is MintUI?">
+  A modern UI component library.
+</UiAccordion>`,
+      },
+      {
+        title: 'Open by default',
+        props: { title: 'Expanded panel', defaultOpen: true },
+        slot: 'This panel starts expanded.',
+        code: `<UiAccordion title="Expanded panel" :default-open="true">
+  This panel starts expanded.
 </UiAccordion>`,
       },
     ],
+    examples: [],
   },
   {
     slug: 'input',
     name: 'Input',
     group: 'Inputs',
     description: 'Input field with label, hint, error and states.',
-    examples: [
+    componentName: 'UiInput',
+    component: UiInput,
+    controls: [
+      { prop: 'placeholder', type: 'text', default: 'Enter text...' },
       {
-        title: 'Basic',
-        code: `<UiInput label="Email" placeholder="you@example.com" type="email" />`,
+        prop: 'type',
+        type: 'select',
+        options: ['text', 'email', 'password', 'number'],
+        default: 'text',
+      },
+      { prop: 'disabled', type: 'boolean', default: false },
+    ],
+    stories: [
+      {
+        title: 'Default',
+        props: { placeholder: 'Enter text...' },
+        code: `<UiInput placeholder="Enter text..." />`,
       },
       {
-        title: 'With hint and error',
-        code: `<UiInput label="Password" type="password" hint="Minimum 8 characters" />
-<UiInput label="Name" error="This field is required" />`,
+        title: 'Email',
+        props: { type: 'email', placeholder: 'you@example.com' },
+        code: `<UiInput type="email" placeholder="you@example.com" />`,
+      },
+      {
+        title: 'Password',
+        props: { type: 'password', placeholder: '••••••••' },
+        code: `<UiInput type="password" placeholder="••••••••" />`,
+      },
+      {
+        title: 'Disabled',
+        props: { disabled: true, placeholder: 'Disabled input' },
+        code: `<UiInput :disabled="true" placeholder="Disabled input" />`,
       },
     ],
+    examples: [],
   },
   {
-    slug: 'card',
-    name: 'Card',
-    group: 'Primitives',
-    description: 'Content card with composable header, body and footer.',
-    examples: [
+    slug: 'stat',
+    name: 'Stat',
+    group: 'Data',
+    description: 'Statistics card with value and trend.',
+    componentName: 'UiStat',
+    component: UiStat,
+    controls: [
+      { prop: 'title', type: 'text', default: 'Total Revenue' },
+      { prop: 'value', type: 'number', default: 45231 },
+      { prop: 'prefix', type: 'text', default: '$' },
       {
-        title: 'Complete',
-        code: `<UiCard>
-  <UiCardHeader>
-    <UiCardTitle>Card Title</UiCardTitle>
-    <UiCardDescription>Short description of the content.</UiCardDescription>
-  </UiCardHeader>
-  <UiCardContent>
-    <p>The main content of your card.</p>
-  </UiCardContent>
-  <UiCardFooter>
-    <UiButton size="sm">Action</UiButton>
-  </UiCardFooter>
-</UiCard>`,
+        prop: 'format',
+        type: 'select',
+        options: ['number', 'currency', 'compact'],
+        default: 'compact',
+      },
+      {
+        prop: 'trend',
+        type: 'select',
+        options: ['none', 'up', 'down'],
+        default: 'up',
+      },
+      {
+        prop: 'trendValue',
+        label: 'Trend value',
+        type: 'text',
+        default: '+12.5%',
       },
     ],
-  },
-  {
-    slug: 'pricing-card',
-    name: 'PricingCard',
-    group: 'Primitives',
-    description: 'Ready-to-use pricing card.',
-    previewHeight: 440,
-    examples: [
+    stories: [
       {
-        title: 'Basic',
-        code: `<UiPricingCard
-  title="Pro"
-  price="$29"
-  description="For growing teams"
-  :features="['Unlimited projects', '100 GB storage', 'Priority support']"
-  :is-popular="true"
-/>`,
+        title: 'Default',
+        props: {
+          title: 'Total Revenue',
+          value: 45231,
+          prefix: '$',
+          format: 'compact',
+          trend: 'up',
+          trendValue: '+12.5%',
+        },
+        code: `<UiStat title="Total Revenue" :value="45231" prefix="$" format="compact" trend="up" trend-value="+12.5%" />`,
+      },
+      {
+        title: 'Down trend',
+        props: {
+          title: 'Bounce Rate',
+          value: 24.8,
+          suffix: '%',
+          trend: 'down',
+          trendValue: '-2.1%',
+        },
+        code: `<UiStat title="Bounce Rate" :value="24.8" suffix="%" trend="down" trend-value="-2.1%" />`,
       },
     ],
+    examples: [],
   },
   {
     slug: 'navbar',
@@ -421,9 +670,9 @@ export const components: ComponentEntry[] = [
     group: 'Navigation',
     description: 'Standard navigation bar with menu and avatar.',
     previewHeight: 120,
-    examples: [
+    stories: [
       {
-        title: 'Basic',
+        title: 'Default',
         code: `<UiNavbar :sticky="false">
   <span class="font-bold">MintUI</span>
   <nav class="flex items-center gap-6 text-sm">
@@ -434,6 +683,7 @@ export const components: ComponentEntry[] = [
 </UiNavbar>`,
       },
     ],
+    examples: [],
   },
   {
     slug: 'navbar-centered',
@@ -441,9 +691,9 @@ export const components: ComponentEntry[] = [
     group: 'Navigation',
     description: 'Navbar with centered logo and navigation links.',
     previewHeight: 120,
-    examples: [
+    stories: [
       {
-        title: 'Basic',
+        title: 'Default',
         code: `<UiNavbarCentered>
   <template #left>
     <span class="font-bold">MintUI</span>
@@ -460,6 +710,7 @@ export const components: ComponentEntry[] = [
 </UiNavbarCentered>`,
       },
     ],
+    examples: [],
   },
   {
     slug: 'navbar-floating',
@@ -467,9 +718,9 @@ export const components: ComponentEntry[] = [
     group: 'Navigation',
     description: 'Floating navbar with glassmorphism effect.',
     previewHeight: 180,
-    examples: [
+    stories: [
       {
-        title: 'Basic',
+        title: 'Default',
         code: `<UiNavbarFloating>
   <span class="font-bold">MintUI</span>
   <nav class="flex items-center gap-4 text-sm">
@@ -480,6 +731,7 @@ export const components: ComponentEntry[] = [
 </UiNavbarFloating>`,
       },
     ],
+    examples: [],
   },
   {
     slug: 'navbar-morph',
@@ -487,9 +739,9 @@ export const components: ComponentEntry[] = [
     group: 'Navigation',
     description: 'Navbar that transforms on scroll.',
     previewHeight: 180,
-    examples: [
+    stories: [
       {
-        title: 'Basic',
+        title: 'Default',
         code: `<UiNavbarMorph>
   <span class="font-bold">MintUI</span>
   <nav class="flex items-center gap-4 text-sm">
@@ -500,6 +752,7 @@ export const components: ComponentEntry[] = [
 </UiNavbarMorph>`,
       },
     ],
+    examples: [],
   },
   {
     slug: 'hero-centric',
@@ -507,12 +760,21 @@ export const components: ComponentEntry[] = [
     group: 'Sections',
     description: 'Centered hero section with CTA.',
     previewHeight: 500,
-    examples: [
+    stories: [
       {
-        title: 'Basic',
-        code: `<UiHeroCentric />`,
+        title: 'Default',
+        code: `<UiHeroCentric title="Build Beautiful UIs">
+  <template #subtitle>
+    Create stunning interfaces with our modern component library
+  </template>
+  <template #actions>
+    <UiButton>Get Started</UiButton>
+    <UiButton variant="outline">Learn More</UiButton>
+  </template>
+</UiHeroCentric>`,
       },
     ],
+    examples: [],
   },
   {
     slug: 'hero-glow',
@@ -520,12 +782,21 @@ export const components: ComponentEntry[] = [
     group: 'Sections',
     description: 'Hero section with gradient glow effect.',
     previewHeight: 500,
-    examples: [
+    stories: [
       {
-        title: 'Basic',
-        code: `<UiHeroGlow />`,
+        title: 'Default',
+        code: `<UiHeroGlow title="Build Beautiful UIs">
+  <template #subtitle>
+    Create stunning interfaces with our modern component library
+  </template>
+  <template #actions>
+    <UiButton>Get Started</UiButton>
+    <UiButton variant="outline">Learn More</UiButton>
+  </template>
+</UiHeroGlow>`,
       },
     ],
+    examples: [],
   },
   {
     slug: 'hero-split',
@@ -533,12 +804,21 @@ export const components: ComponentEntry[] = [
     group: 'Sections',
     description: 'Two-column hero section with text + visual.',
     previewHeight: 500,
-    examples: [
+    stories: [
       {
-        title: 'Basic',
-        code: `<UiHeroSplit />`,
+        title: 'Default',
+        code: `<UiHeroSplit title="Build Beautiful UIs">
+  <template #subtitle>
+    Create stunning interfaces with our modern component library
+  </template>
+  <template #actions>
+    <UiButton>Get Started</UiButton>
+    <UiButton variant="outline">Learn More</UiButton>
+  </template>
+</UiHeroSplit>`,
       },
     ],
+    examples: [],
   },
   {
     slug: 'faq',
@@ -546,82 +826,57 @@ export const components: ComponentEntry[] = [
     group: 'Sections',
     description: 'FAQ section with accordions.',
     previewHeight: 500,
-    examples: [
+    stories: [
       {
-        title: 'Basic',
-        code: `<UiFaq />`,
+        title: 'Default',
+        code: `<UiFaq :items="[
+  { question: 'What is MintUI?', answer: 'A modern UI component library.' },
+  { question: 'How to install?', answer: 'Run npm install @florianjs/mintui' },
+]" />`,
       },
     ],
-  },
-  {
-    slug: 'stat',
-    name: 'Stat',
-    group: 'Data',
-    description: 'Statistics card with value and trend.',
-    examples: [
-      {
-        title: 'Basic',
-        code: `<UiStat
-  title="Total Revenue"
-  :value="45231"
-  prefix="$"
-  format="compact"
-  trend="up"
-  trend-value="+12.5%"
-/>`,
-      },
-    ],
+    examples: [],
   },
   {
     slug: 'table',
     name: 'Table',
     group: 'Data',
     description: 'Data table with sorting and styles.',
-    examples: [
+    stories: [
       {
-        title: 'Basic',
+        title: 'Default',
         code: `<UiTable
-  :columns="columns"
-  :data="data"
+  :columns="[
+    { key: 'name', label: 'Name', sortable: true },
+    { key: 'email', label: 'Email' },
+    { key: 'role', label: 'Role' },
+  ]"
+  :data="[
+    { id: 1, name: 'John Doe', email: 'john@example.com', role: 'Admin' },
+    { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'User' },
+  ]"
   row-key="id"
-  default-sort-key="name"
-/>
-
-<script setup>
-const columns = [
-  { key: 'name', label: 'Name', sortable: true },
-  { key: 'email', label: 'Email', sortable: true },
-  { key: 'role', label: 'Role' },
-]
-const data = [
-  { id: 1, name: 'John Doe', email: 'john@example.com', role: 'Admin' },
-  { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'User' },
-]
-<\/script>`,
+/>`,
       },
     ],
+    examples: [],
   },
   {
     slug: 'chart',
     name: 'Chart',
     group: 'Data',
     description: 'Charts via ApexCharts (line, bar, donut...).',
-    examples: [
+    stories: [
       {
-        title: 'Basic',
+        title: 'Default',
         code: `<UiChart
   type="area"
-  :series="series"
-  :options="{ xaxis: { categories: ['Jan', 'Feb', 'Mar'] } }"
-/>
-
-<script setup>
-const series = [
-  { name: 'Revenue', data: [3100, 4000, 2800] },
-]
-<\/script>`,
+  :series="[{ name: 'Revenue', data: [3100, 4000, 2800, 5100] }]"
+  :options="{ xaxis: { categories: ['Jan', 'Feb', 'Mar', 'Apr'] } }"
+/>`,
       },
     ],
+    examples: [],
   },
   {
     slug: 'dash-layout',
@@ -629,9 +884,9 @@ const series = [
     group: 'Dashboard',
     description: 'Dashboard layout with sidebar and navbar.',
     previewHeight: 500,
-    examples: [
+    stories: [
       {
-        title: 'Basic',
+        title: 'Default',
         code: `<UiDashLayout>
   <template #sidebar>
     <UiDashSidebar>
@@ -649,6 +904,7 @@ const series = [
 </UiDashLayout>`,
       },
     ],
+    examples: [],
   },
   {
     slug: 'dash-navbar',
@@ -656,15 +912,16 @@ const series = [
     group: 'Dashboard',
     description: 'Dashboard navbar with search and actions.',
     previewHeight: 120,
-    examples: [
+    stories: [
       {
-        title: 'Basic',
+        title: 'Default',
         code: `<UiDashNavbar>
   <span class="font-semibold">Dashboard</span>
   <UiButton size="sm">+ New</UiButton>
 </UiDashNavbar>`,
       },
     ],
+    examples: [],
   },
   {
     slug: 'dash-content',
@@ -672,23 +929,24 @@ const series = [
     group: 'Dashboard',
     description: 'Main dashboard content area.',
     previewHeight: 300,
-    examples: [
+    stories: [
       {
-        title: 'Basic',
+        title: 'Default',
         code: `<UiDashContent>
   <!-- your page content here -->
 </UiDashContent>`,
       },
     ],
+    examples: [],
   },
   {
     slug: 'dash-sidebar',
     name: 'DashSidebar',
     group: 'Dashboard',
     description: 'Dashboard navigation sidebar.',
-    examples: [
+    stories: [
       {
-        title: 'Basic',
+        title: 'Default',
         code: `<UiDashSidebar>
   <div class="flex h-14 items-center border-b px-4">
     <span class="font-bold">MintUI</span>
@@ -700,6 +958,7 @@ const series = [
 </UiDashSidebar>`,
       },
     ],
+    examples: [],
   },
 ];
 
