@@ -1,89 +1,151 @@
 <script setup lang="ts">
-import { computed, defineAsyncComponent, ref, inject, onUnmounted } from 'vue'
-import type { Ref } from 'vue'
-import { landingPages } from '~/showcase/registry'
+import {
+  computed,
+  defineAsyncComponent,
+  ref,
+  inject,
+  onUnmounted,
+  watch,
+} from 'vue';
+import type { Ref } from 'vue';
+import { landingPages } from '~/showcase/registry';
 
-definePageMeta({ layout: 'showcase' })
+definePageMeta({ layout: 'showcase' });
 
-const route = useRoute()
-const slug = computed(() => route.params.slug as string)
-const entry = computed(() => landingPages.find(p => p.slug === slug.value))
+const route = useRoute();
+const slug = computed(() => route.params.slug as string);
+const entry = computed(() => landingPages.find((p) => p.slug === slug.value));
 
 const componentMap: Record<string, any> = {
-  agency: defineAsyncComponent(() => import('~/components/Landing/LandingAgency.vue')),
-  app: defineAsyncComponent(() => import('~/components/Landing/LandingApp.vue')),
-  saas: defineAsyncComponent(() => import('~/components/Landing/LandingSaaS.vue')),
-}
+  agency: defineAsyncComponent(
+    () => import('~/components/Landing/LandingAgency.vue'),
+  ),
+  app: defineAsyncComponent(
+    () => import('~/components/Landing/LandingApp.vue'),
+  ),
+  saas: defineAsyncComponent(
+    () => import('~/components/Landing/LandingSaaS.vue'),
+  ),
+  portfolio: defineAsyncComponent(
+    () => import('~/components/Landing/LandingPortfolio.vue'),
+  ),
+  event: defineAsyncComponent(
+    () => import('~/components/Landing/LandingEvent.vue'),
+  ),
+  'dashboard-data': defineAsyncComponent(
+    () => import('~/components/Landing/LandingDashboardData.vue'),
+  ),
+  'dashboard-crm': defineAsyncComponent(
+    () => import('~/components/Landing/LandingDashboardCRM.vue'),
+  ),
+  artisan: defineAsyncComponent(
+    () => import('~/components/Landing/LandingArtisan.vue'),
+  ),
+  organic: defineAsyncComponent(
+    () => import('~/components/Landing/LandingOrganic.vue'),
+  ),
+  hairdresser: defineAsyncComponent(
+    () => import('~/components/Landing/LandingHairdresser.vue'),
+  ),
+  chef: defineAsyncComponent(
+    () => import('~/components/Landing/LandingChef.vue'),
+  ),
+};
 
-const landingComponent = computed(() => componentMap[slug.value] ?? null)
+const landingComponent = computed(() => componentMap[slug.value] ?? null);
 
 const codeMap: Record<string, string> = {
   agency: '<LandingAgency />',
   app: '<LandingApp />',
   saas: '<LandingSaaS />',
-}
+  portfolio: '<LandingPortfolio />',
+  event: '<LandingEvent />',
+  'dashboard-data': '<LandingDashboardData />',
+  'dashboard-crm': '<LandingDashboardCRM />',
+  artisan: '<LandingArtisan />',
+  organic: '<LandingOrganic />',
+  hairdresser: '<LandingHairdresser />',
+  chef: '<LandingChef />',
+};
 
-const usageCode = computed(() => codeMap[slug.value] ?? '')
+const usageCode = computed(() => codeMap[slug.value] ?? '');
 
-const fullscreen = ref(false)
-const isDark = inject<Ref<boolean>>('previewDark', ref(false))
+const fullscreen = ref(false);
+const isDark = inject<Ref<boolean>>('previewDark', ref(false));
 
-const previewContainer = ref<HTMLElement | null>(null)
-const previewHeight = ref(entry.value?.previewHeight ?? 600)
-const previewWidth = ref<number | null>(entry.value?.previewWidth ?? null)
-const isResizing = ref(false)
+const previewContainer = ref<HTMLElement | null>(null);
+const previewHeight = ref(entry.value?.previewHeight ?? 600);
+const previewWidth = ref<number | null>(entry.value?.previewWidth ?? null);
 
-let resizeHandler: ((ev: MouseEvent) => void) | null = null
+watch(
+  entry,
+  (newEntry) => {
+    if (newEntry) {
+      if (newEntry.previewHeight !== undefined) {
+        previewHeight.value = newEntry.previewHeight;
+      }
+      previewWidth.value = newEntry.previewWidth ?? null;
+    }
+  },
+  { immediate: true },
+);
+
+const isResizing = ref(false);
+
+let resizeHandler: ((ev: MouseEvent) => void) | null = null;
 
 function cleanupResize() {
   if (resizeHandler) {
-    document.removeEventListener('mousemove', resizeHandler)
-    resizeHandler = null
+    document.removeEventListener('mousemove', resizeHandler);
+    resizeHandler = null;
   }
-  document.removeEventListener('mouseup', stopResize)
-  window.removeEventListener('blur', stopResize)
-  isResizing.value = false
+  document.removeEventListener('mouseup', stopResize);
+  window.removeEventListener('blur', stopResize);
+  isResizing.value = false;
 }
 
 function stopResize() {
-  cleanupResize()
+  cleanupResize();
 }
 
 onUnmounted(() => {
-  cleanupResize()
-})
+  cleanupResize();
+});
 
 function startResizeHeight(e: MouseEvent) {
-  e.preventDefault()
-  cleanupResize()
-  isResizing.value = true
-  const startY = e.clientY
-  const startH = previewHeight.value
+  e.preventDefault();
+  cleanupResize();
+  isResizing.value = true;
+  const startY = e.clientY;
+  const startH = previewHeight.value;
   resizeHandler = (ev: MouseEvent) => {
-    previewHeight.value = Math.max(200, startH + ev.clientY - startY)
-  }
-  document.addEventListener('mousemove', resizeHandler)
-  document.addEventListener('mouseup', stopResize)
-  window.addEventListener('blur', stopResize)
+    previewHeight.value = Math.max(200, startH + ev.clientY - startY);
+  };
+  document.addEventListener('mousemove', resizeHandler);
+  document.addEventListener('mouseup', stopResize);
+  window.addEventListener('blur', stopResize);
 }
 
 function startResizeWidth(e: MouseEvent) {
-  e.preventDefault()
-  cleanupResize()
-  isResizing.value = true
-  const startX = e.clientX
-  const startW = previewWidth.value ?? (previewContainer.value!.offsetWidth - 10)
+  e.preventDefault();
+  cleanupResize();
+  isResizing.value = true;
+  const startX = e.clientX;
+  const startW = previewWidth.value ?? previewContainer.value!.offsetWidth - 10;
   resizeHandler = (ev: MouseEvent) => {
-    const cw = previewContainer.value!.offsetWidth
-    previewWidth.value = Math.min(cw - 10, Math.max(320, startW + ev.clientX - startX))
-  }
-  document.addEventListener('mousemove', resizeHandler)
-  document.addEventListener('mouseup', stopResize)
-  window.addEventListener('blur', stopResize)
+    const cw = previewContainer.value!.offsetWidth;
+    previewWidth.value = Math.min(
+      cw - 10,
+      Math.max(320, startW + ev.clientX - startX),
+    );
+  };
+  document.addEventListener('mousemove', resizeHandler);
+  document.addEventListener('mouseup', stopResize);
+  window.addEventListener('blur', stopResize);
 }
 
 function resetWidth() {
-  previewWidth.value = null
+  previewWidth.value = null;
 }
 </script>
 
@@ -101,8 +163,17 @@ function resetWidth() {
             @click="fullscreen = false"
             class="inline-flex items-center gap-1.5 text-xs bg-background border border-border rounded-md px-3 py-1.5 shadow-lg hover:bg-accent transition-colors"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-3.5 w-3.5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"
+              />
             </svg>
             Exit fullscreen
           </button>
@@ -115,7 +186,10 @@ function resetWidth() {
       <!-- Header -->
       <div class="mb-6">
         <div class="flex items-center gap-2 mb-1">
-          <span class="text-xs font-medium text-muted-foreground uppercase tracking-wider">Landing Pages</span>
+          <span
+            class="text-xs font-medium text-muted-foreground uppercase tracking-wider"
+            >Landing Pages</span
+          >
         </div>
         <div class="flex items-center justify-between">
           <div>
@@ -126,8 +200,15 @@ function resetWidth() {
             @click="fullscreen = true"
             class="inline-flex items-center gap-2 text-sm border border-border rounded-lg px-4 py-2 hover:bg-accent transition-colors"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-4 w-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
             </svg>
             Fullscreen
           </button>
@@ -136,16 +217,28 @@ function resetWidth() {
 
       <!-- Preview -->
       <div class="rounded-xl border border-border overflow-hidden mb-2">
-        <div class="flex items-center gap-2 px-4 py-2 border-b border-border bg-muted/30">
+        <div
+          class="flex items-center gap-2 px-4 py-2 border-b border-border bg-muted/30"
+        >
           <div class="flex gap-1.5">
             <div class="h-3 w-3 rounded-full bg-red-400/60"></div>
             <div class="h-3 w-3 rounded-full bg-yellow-400/60"></div>
             <div class="h-3 w-3 rounded-full bg-green-400/60"></div>
           </div>
-          <span class="text-xs text-muted-foreground font-mono flex-1 text-center">Preview</span>
+          <span
+            class="text-xs text-muted-foreground font-mono flex-1 text-center"
+            >Preview</span
+          >
           <div v-if="previewWidth !== null" class="flex items-center gap-2">
-            <span class="text-xs text-muted-foreground font-mono">{{ previewWidth }}px</span>
-            <button @click="resetWidth" class="text-xs text-muted-foreground hover:text-foreground transition-colors">↔ reset</button>
+            <span class="text-xs text-muted-foreground font-mono"
+              >{{ previewWidth }}px</span
+            >
+            <button
+              @click="resetWidth"
+              class="text-xs text-muted-foreground hover:text-foreground transition-colors"
+            >
+              ↔ reset
+            </button>
           </div>
         </div>
         <div
@@ -154,9 +247,12 @@ function resetWidth() {
           class="flex overflow-hidden"
         >
           <div
-            :class="[isDark ? 'dark' : '', previewWidth !== null ? 'shrink-0' : 'flex-1']"
+            :class="[
+              isDark ? 'dark' : '',
+              previewWidth !== null ? 'shrink-0' : 'flex-1',
+            ]"
             :style="previewWidth !== null ? { width: previewWidth + 'px' } : {}"
-            class="h-full overflow-auto bg-background"
+            class="h-full overflow-auto bg-background relative"
           >
             <component :is="landingComponent" v-if="landingComponent" />
           </div>
@@ -165,7 +261,9 @@ function resetWidth() {
             @mousedown="startResizeWidth"
             class="w-2.5 h-full cursor-col-resize flex items-center justify-center group shrink-0 border-l border-border bg-muted/20 hover:bg-primary/10 transition-colors"
           >
-            <div class="w-px h-8 rounded-full bg-muted-foreground/30 group-hover:bg-primary/50 transition-colors"></div>
+            <div
+              class="w-px h-8 rounded-full bg-muted-foreground/30 group-hover:bg-primary/50 transition-colors"
+            ></div>
           </div>
         </div>
       </div>
@@ -175,7 +273,9 @@ function resetWidth() {
         @mousedown="startResizeHeight"
         class="flex items-center justify-center h-2.5 cursor-row-resize group select-none border-t border-border bg-muted/20 hover:bg-primary/10 transition-colors"
       >
-        <div class="w-8 h-px rounded-full bg-muted-foreground/30 group-hover:bg-primary/50 transition-colors"></div>
+        <div
+          class="w-8 h-px rounded-full bg-muted-foreground/30 group-hover:bg-primary/50 transition-colors"
+        ></div>
       </div>
 
       <!-- Usage -->

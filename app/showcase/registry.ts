@@ -1,51 +1,51 @@
-import UiButton from '~/components/Ui/Button.vue'
-import UiAlert from '~/components/Ui/Alert.vue'
-import UiBadge from '~/components/Ui/Badge.vue'
+import UiButton from '~/components/Ui/Button.vue';
+import UiAlert from '~/components/Ui/Alert.vue';
+import UiBadge from '~/components/Ui/Badge.vue';
 
 export type Example = {
-  title: string
-  code: string
-}
+  title: string;
+  code: string;
+};
 
 export type ControlDef = {
-  prop: string
-  label?: string
-  type: 'select' | 'boolean' | 'text' | 'number'
-  options?: string[]
-  default: any
-  isSlot?: boolean
-}
+  prop: string;
+  label?: string;
+  type: 'select' | 'boolean' | 'text' | 'number';
+  options?: string[];
+  default: any;
+  isSlot?: boolean;
+};
 
 export type Story = {
-  title: string
-  description?: string
-  props?: Record<string, any>
-  slot?: string
-  code: string
-}
+  title: string;
+  description?: string;
+  props?: Record<string, any>;
+  slot?: string;
+  code: string;
+};
 
 export type ComponentEntry = {
-  slug: string
-  name: string
-  group: string
-  description: string
-  componentName?: string
+  slug: string;
+  name: string;
+  group: string;
+  description: string;
+  componentName?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  component?: any
-  controls?: ControlDef[]
-  stories?: Story[]
-  examples: Example[]
-  previewHeight?: number
-  previewWidth?: number
-}
+  component?: any;
+  controls?: ControlDef[];
+  stories?: Story[];
+  examples: Example[];
+  previewHeight?: number;
+  previewWidth?: number;
+};
 
 export type LandingEntry = {
-  slug: string
-  name: string
-  description: string
-  previewHeight?: number
-  previewWidth?: number
-}
+  slug: string;
+  name: string;
+  description: string;
+  previewHeight?: number;
+  previewWidth?: number;
+};
 
 export const componentGroups = [
   'Primitives',
@@ -55,37 +55,130 @@ export const componentGroups = [
   'Dashboard',
   'Data',
   'Sections',
-] as const
+] as const;
 
 export const components: ComponentEntry[] = [
   {
     slug: 'button',
     name: 'Button',
     group: 'Primitives',
-    description: 'Interactive button with 10 variants, 4 sizes and loading/success/error states.',
+    description:
+      'Interactive button with 10 variants, 4 sizes and loading/success/error states.',
     componentName: 'UiButton',
     component: UiButton,
     controls: [
-      { prop: 'label', label: 'Label', type: 'text', default: 'Button', isSlot: true },
-      { prop: 'variant', type: 'select', options: ['default', 'secondary', 'destructive', 'outline', 'ghost', 'link', 'soft', 'gradient', 'elevated', 'positive'], default: 'default' },
-      { prop: 'size', type: 'select', options: ['sm', 'default', 'lg', 'icon'], default: 'default' },
+      {
+        prop: 'label',
+        label: 'Label',
+        type: 'text',
+        default: 'Button',
+        isSlot: true,
+      },
+      {
+        prop: 'variant',
+        type: 'select',
+        options: [
+          'default',
+          'secondary',
+          'destructive',
+          'outline',
+          'ghost',
+          'link',
+          'soft',
+          'gradient',
+          'elevated',
+          'positive',
+        ],
+        default: 'default',
+      },
+      {
+        prop: 'size',
+        type: 'select',
+        options: ['sm', 'default', 'lg', 'icon'],
+        default: 'default',
+      },
       { prop: 'disabled', type: 'boolean', default: false },
       { prop: 'loading', type: 'boolean', default: false },
     ],
     stories: [
-      { title: 'Default', props: {}, slot: 'Button', code: `<UiButton>Button</UiButton>` },
-      { title: 'Secondary', props: { variant: 'secondary' }, slot: 'Secondary', code: `<UiButton variant="secondary">Secondary</UiButton>` },
-      { title: 'Destructive', props: { variant: 'destructive' }, slot: 'Destructive', code: `<UiButton variant="destructive">Destructive</UiButton>` },
-      { title: 'Outline', props: { variant: 'outline' }, slot: 'Outline', code: `<UiButton variant="outline">Outline</UiButton>` },
-      { title: 'Ghost', props: { variant: 'ghost' }, slot: 'Ghost', code: `<UiButton variant="ghost">Ghost</UiButton>` },
-      { title: 'Soft', props: { variant: 'soft' }, slot: 'Soft', code: `<UiButton variant="soft">Soft</UiButton>` },
-      { title: 'Gradient', props: { variant: 'gradient' }, slot: 'Gradient', code: `<UiButton variant="gradient">Gradient</UiButton>` },
-      { title: 'Elevated', props: { variant: 'elevated' }, slot: 'Elevated', code: `<UiButton variant="elevated">Elevated</UiButton>` },
-      { title: 'Positive', props: { variant: 'positive' }, slot: 'Positive', code: `<UiButton variant="positive">Positive</UiButton>` },
-      { title: 'Small', props: { size: 'sm' }, slot: 'Small', code: `<UiButton size="sm">Small</UiButton>` },
-      { title: 'Large', props: { size: 'lg' }, slot: 'Large', code: `<UiButton size="lg">Large</UiButton>` },
-      { title: 'Disabled', props: { disabled: true }, slot: 'Disabled', code: `<UiButton :disabled="true">Disabled</UiButton>` },
-      { title: 'Loading', props: { loading: true }, slot: 'Loading', code: `<UiButton :loading="true">Loading</UiButton>` },
+      {
+        title: 'Default',
+        props: {},
+        slot: 'Button',
+        code: `<UiButton>Button</UiButton>`,
+      },
+      {
+        title: 'Secondary',
+        props: { variant: 'secondary' },
+        slot: 'Secondary',
+        code: `<UiButton variant="secondary">Secondary</UiButton>`,
+      },
+      {
+        title: 'Destructive',
+        props: { variant: 'destructive' },
+        slot: 'Destructive',
+        code: `<UiButton variant="destructive">Destructive</UiButton>`,
+      },
+      {
+        title: 'Outline',
+        props: { variant: 'outline' },
+        slot: 'Outline',
+        code: `<UiButton variant="outline">Outline</UiButton>`,
+      },
+      {
+        title: 'Ghost',
+        props: { variant: 'ghost' },
+        slot: 'Ghost',
+        code: `<UiButton variant="ghost">Ghost</UiButton>`,
+      },
+      {
+        title: 'Soft',
+        props: { variant: 'soft' },
+        slot: 'Soft',
+        code: `<UiButton variant="soft">Soft</UiButton>`,
+      },
+      {
+        title: 'Gradient',
+        props: { variant: 'gradient' },
+        slot: 'Gradient',
+        code: `<UiButton variant="gradient">Gradient</UiButton>`,
+      },
+      {
+        title: 'Elevated',
+        props: { variant: 'elevated' },
+        slot: 'Elevated',
+        code: `<UiButton variant="elevated">Elevated</UiButton>`,
+      },
+      {
+        title: 'Positive',
+        props: { variant: 'positive' },
+        slot: 'Positive',
+        code: `<UiButton variant="positive">Positive</UiButton>`,
+      },
+      {
+        title: 'Small',
+        props: { size: 'sm' },
+        slot: 'Small',
+        code: `<UiButton size="sm">Small</UiButton>`,
+      },
+      {
+        title: 'Large',
+        props: { size: 'lg' },
+        slot: 'Large',
+        code: `<UiButton size="lg">Large</UiButton>`,
+      },
+      {
+        title: 'Disabled',
+        props: { disabled: true },
+        slot: 'Disabled',
+        code: `<UiButton :disabled="true">Disabled</UiButton>`,
+      },
+      {
+        title: 'Loading',
+        props: { loading: true },
+        slot: 'Loading',
+        code: `<UiButton :loading="true">Loading</UiButton>`,
+      },
     ],
     examples: [],
   },
@@ -97,14 +190,45 @@ export const components: ComponentEntry[] = [
     componentName: 'UiBadge',
     component: UiBadge,
     controls: [
-      { prop: 'label', label: 'Label', type: 'text', default: 'Badge', isSlot: true },
-      { prop: 'variant', type: 'select', options: ['default', 'secondary', 'destructive', 'outline'], default: 'default' },
+      {
+        prop: 'label',
+        label: 'Label',
+        type: 'text',
+        default: 'Badge',
+        isSlot: true,
+      },
+      {
+        prop: 'variant',
+        type: 'select',
+        options: ['default', 'secondary', 'destructive', 'outline'],
+        default: 'default',
+      },
     ],
     stories: [
-      { title: 'Default', props: {}, slot: 'Badge', code: `<UiBadge>Badge</UiBadge>` },
-      { title: 'Secondary', props: { variant: 'secondary' }, slot: 'Secondary', code: `<UiBadge variant="secondary">Secondary</UiBadge>` },
-      { title: 'Destructive', props: { variant: 'destructive' }, slot: 'Destructive', code: `<UiBadge variant="destructive">Destructive</UiBadge>` },
-      { title: 'Outline', props: { variant: 'outline' }, slot: 'Outline', code: `<UiBadge variant="outline">Outline</UiBadge>` },
+      {
+        title: 'Default',
+        props: {},
+        slot: 'Badge',
+        code: `<UiBadge>Badge</UiBadge>`,
+      },
+      {
+        title: 'Secondary',
+        props: { variant: 'secondary' },
+        slot: 'Secondary',
+        code: `<UiBadge variant="secondary">Secondary</UiBadge>`,
+      },
+      {
+        title: 'Destructive',
+        props: { variant: 'destructive' },
+        slot: 'Destructive',
+        code: `<UiBadge variant="destructive">Destructive</UiBadge>`,
+      },
+      {
+        title: 'Outline',
+        props: { variant: 'outline' },
+        slot: 'Outline',
+        code: `<UiBadge variant="outline">Outline</UiBadge>`,
+      },
     ],
     examples: [],
   },
@@ -167,14 +291,51 @@ export const components: ComponentEntry[] = [
     component: UiAlert,
     controls: [
       { prop: 'title', type: 'text', default: 'Information' },
-      { prop: 'description', type: 'text', default: 'Un message important à afficher.' },
-      { prop: 'variant', type: 'select', options: ['default', 'success', 'warning', 'destructive'], default: 'default' },
+      {
+        prop: 'description',
+        type: 'text',
+        default: 'Un message important à afficher.',
+      },
+      {
+        prop: 'variant',
+        type: 'select',
+        options: ['default', 'success', 'warning', 'destructive'],
+        default: 'default',
+      },
     ],
     stories: [
-      { title: 'Default', props: { title: 'Info', description: 'Important information.' }, code: `<UiAlert title="Info" description="Important information." />` },
-      { title: 'Success', props: { variant: 'success', title: 'Success', description: 'Operation completed.' }, code: `<UiAlert variant="success" title="Success" description="Operation completed." />` },
-      { title: 'Warning', props: { variant: 'warning', title: 'Warning', description: 'Check before continuing.' }, code: `<UiAlert variant="warning" title="Warning" description="Check before continuing." />` },
-      { title: 'Destructive', props: { variant: 'destructive', title: 'Error', description: 'An error occurred.' }, code: `<UiAlert variant="destructive" title="Error" description="An error occurred." />` },
+      {
+        title: 'Default',
+        props: { title: 'Info', description: 'Important information.' },
+        code: `<UiAlert title="Info" description="Important information." />`,
+      },
+      {
+        title: 'Success',
+        props: {
+          variant: 'success',
+          title: 'Success',
+          description: 'Operation completed.',
+        },
+        code: `<UiAlert variant="success" title="Success" description="Operation completed." />`,
+      },
+      {
+        title: 'Warning',
+        props: {
+          variant: 'warning',
+          title: 'Warning',
+          description: 'Check before continuing.',
+        },
+        code: `<UiAlert variant="warning" title="Warning" description="Check before continuing." />`,
+      },
+      {
+        title: 'Destructive',
+        props: {
+          variant: 'destructive',
+          title: 'Error',
+          description: 'An error occurred.',
+        },
+        code: `<UiAlert variant="destructive" title="Error" description="An error occurred." />`,
+      },
     ],
     examples: [],
   },
@@ -540,7 +701,7 @@ const series = [
       },
     ],
   },
-]
+];
 
 export const landingPages: LandingEntry[] = [
   {
@@ -561,4 +722,54 @@ export const landingPages: LandingEntry[] = [
     description: 'Complete SaaS landing page with pricing and features.',
     previewHeight: 900,
   },
-]
+  {
+    slug: 'portfolio',
+    name: 'Portfolio',
+    description: 'A sleek, highly artistic portfolio template for creators.',
+    previewHeight: 900,
+  },
+  {
+    slug: 'event',
+    name: 'Event',
+    description: 'Dynamic and glassmorphic landing page for conferences.',
+    previewHeight: 900,
+  },
+  {
+    slug: 'dashboard-data',
+    name: 'Dashboard Data',
+    description: 'A highly technical, data-heavy analytics dashboard.',
+    previewHeight: 900,
+  },
+  {
+    slug: 'dashboard-crm',
+    name: 'Dashboard CRM',
+    description:
+      'A clean, bright, and highly organized Project Management / CRM dashboard.',
+    previewHeight: 900,
+  },
+  {
+    slug: 'artisan',
+    name: 'Artisan',
+    description:
+      'Craftsman and ceramics studio landing page with earthy tones.',
+    previewHeight: 900,
+  },
+  {
+    slug: 'organic',
+    name: 'Organic Shop',
+    description: 'Fresh farm-to-table organic shop with natural colors.',
+    previewHeight: 900,
+  },
+  {
+    slug: 'hairdresser',
+    name: 'Hairdresser',
+    description: 'Modern, chic hair salon landing page with booking emphasis.',
+    previewHeight: 900,
+  },
+  {
+    slug: 'chef',
+    name: 'Home Chef',
+    description: 'Elegant, dark-themed fine dining personal chef experience.',
+    previewHeight: 900,
+  },
+];
