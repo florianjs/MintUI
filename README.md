@@ -1,5 +1,7 @@
 # 🌿 MintUI
 
+Made with this awesome [$10 Coding AI + OpenCode](https://z.ai/subscribe?ic=SVEALL4DWW) 🚀
+
 Stop burning tokens. Build faster.
 
 MintUI isn’t just another UI kit. It’s a productivity framework for Nuxt 4 + TailwindCSS, engineered to be as light on your codebase as it is on your LLM budget.
