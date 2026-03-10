@@ -3,18 +3,42 @@ export type Example = {
   code: string
 }
 
+export type ControlDef = {
+  prop: string
+  label?: string
+  type: 'select' | 'boolean' | 'text' | 'number'
+  options?: string[]
+  default: any
+  isSlot?: boolean
+}
+
+export type Story = {
+  title: string
+  description?: string
+  props?: Record<string, any>
+  slot?: string
+  code: string
+}
+
 export type ComponentEntry = {
   slug: string
   name: string
   group: string
   description: string
+  componentName?: string
+  controls?: ControlDef[]
+  stories?: Story[]
   examples: Example[]
+  previewHeight?: number
+  previewWidth?: number
 }
 
 export type LandingEntry = {
   slug: string
   name: string
   description: string
+  previewHeight?: number
+  previewWidth?: number
 }
 
 export const componentGroups = [
@@ -33,48 +57,48 @@ export const components: ComponentEntry[] = [
     name: 'Button',
     group: 'Primitives',
     description: 'Bouton interactif avec 10 variants, 4 tailles et états loading/success/error.',
-    examples: [
-      {
-        title: 'Variants',
-        code: `<UiButton>Default</UiButton>
-<UiButton variant="secondary">Secondary</UiButton>
-<UiButton variant="destructive">Destructive</UiButton>
-<UiButton variant="outline">Outline</UiButton>
-<UiButton variant="ghost">Ghost</UiButton>
-<UiButton variant="soft">Soft</UiButton>
-<UiButton variant="gradient">Gradient</UiButton>
-<UiButton variant="elevated">Elevated</UiButton>
-<UiButton variant="positive">Positive</UiButton>`,
-      },
-      {
-        title: 'Tailles',
-        code: `<UiButton size="sm">Small</UiButton>
-<UiButton>Default</UiButton>
-<UiButton size="lg">Large</UiButton>`,
-      },
-      {
-        title: 'États',
-        code: `<UiButton :loading="true">Loading</UiButton>
-<UiButton :state="'success'" :reset-after="0">Success</UiButton>
-<UiButton :state="'error'" :reset-after="0">Error</UiButton>
-<UiButton :disabled="true">Disabled</UiButton>`,
-      },
+    componentName: 'UiButton',
+    controls: [
+      { prop: 'label', label: 'Label', type: 'text', default: 'Button', isSlot: true },
+      { prop: 'variant', type: 'select', options: ['default', 'secondary', 'destructive', 'outline', 'ghost', 'link', 'soft', 'gradient', 'elevated', 'positive'], default: 'default' },
+      { prop: 'size', type: 'select', options: ['sm', 'default', 'lg', 'icon'], default: 'default' },
+      { prop: 'disabled', type: 'boolean', default: false },
+      { prop: 'loading', type: 'boolean', default: false },
     ],
+    stories: [
+      { title: 'Default', props: {}, slot: 'Button', code: `<UiButton>Button</UiButton>` },
+      { title: 'Secondary', props: { variant: 'secondary' }, slot: 'Secondary', code: `<UiButton variant="secondary">Secondary</UiButton>` },
+      { title: 'Destructive', props: { variant: 'destructive' }, slot: 'Destructive', code: `<UiButton variant="destructive">Destructive</UiButton>` },
+      { title: 'Outline', props: { variant: 'outline' }, slot: 'Outline', code: `<UiButton variant="outline">Outline</UiButton>` },
+      { title: 'Ghost', props: { variant: 'ghost' }, slot: 'Ghost', code: `<UiButton variant="ghost">Ghost</UiButton>` },
+      { title: 'Soft', props: { variant: 'soft' }, slot: 'Soft', code: `<UiButton variant="soft">Soft</UiButton>` },
+      { title: 'Gradient', props: { variant: 'gradient' }, slot: 'Gradient', code: `<UiButton variant="gradient">Gradient</UiButton>` },
+      { title: 'Elevated', props: { variant: 'elevated' }, slot: 'Elevated', code: `<UiButton variant="elevated">Elevated</UiButton>` },
+      { title: 'Positive', props: { variant: 'positive' }, slot: 'Positive', code: `<UiButton variant="positive">Positive</UiButton>` },
+      { title: 'Small', props: { size: 'sm' }, slot: 'Small', code: `<UiButton size="sm">Small</UiButton>` },
+      { title: 'Large', props: { size: 'lg' }, slot: 'Large', code: `<UiButton size="lg">Large</UiButton>` },
+      { title: 'Disabled', props: { disabled: true }, slot: 'Disabled', code: `<UiButton :disabled="true">Disabled</UiButton>` },
+      { title: 'Loading', props: { loading: true }, slot: 'Loading', code: `<UiButton :loading="true">Loading</UiButton>` },
+    ],
+    examples: [],
   },
   {
     slug: 'badge',
     name: 'Badge',
     group: 'Primitives',
     description: 'Étiquette inline pour catégories, statuts ou labels.',
-    examples: [
-      {
-        title: 'Variants',
-        code: `<UiBadge>Default</UiBadge>
-<UiBadge variant="secondary">Secondary</UiBadge>
-<UiBadge variant="destructive">Destructive</UiBadge>
-<UiBadge variant="outline">Outline</UiBadge>`,
-      },
+    componentName: 'UiBadge',
+    controls: [
+      { prop: 'label', label: 'Label', type: 'text', default: 'Badge', isSlot: true },
+      { prop: 'variant', type: 'select', options: ['default', 'secondary', 'destructive', 'outline'], default: 'default' },
     ],
+    stories: [
+      { title: 'Default', props: {}, slot: 'Badge', code: `<UiBadge>Badge</UiBadge>` },
+      { title: 'Secondary', props: { variant: 'secondary' }, slot: 'Secondary', code: `<UiBadge variant="secondary">Secondary</UiBadge>` },
+      { title: 'Destructive', props: { variant: 'destructive' }, slot: 'Destructive', code: `<UiBadge variant="destructive">Destructive</UiBadge>` },
+      { title: 'Outline', props: { variant: 'outline' }, slot: 'Outline', code: `<UiBadge variant="outline">Outline</UiBadge>` },
+    ],
+    examples: [],
   },
   {
     slug: 'avatar',
@@ -131,15 +155,19 @@ export const components: ComponentEntry[] = [
     name: 'Alert',
     group: 'Feedback',
     description: 'Message d\'alerte avec 4 variants sémantiques.',
-    examples: [
-      {
-        title: 'Variants',
-        code: `<UiAlert title="Info" description="Une information importante." />
-<UiAlert variant="success" title="Succès" description="Opération réussie." />
-<UiAlert variant="warning" title="Attention" description="Vérifiez avant de continuer." />
-<UiAlert variant="destructive" title="Erreur" description="Une erreur est survenue." />`,
-      },
+    componentName: 'UiAlert',
+    controls: [
+      { prop: 'title', type: 'text', default: 'Information' },
+      { prop: 'description', type: 'text', default: 'Un message important à afficher.' },
+      { prop: 'variant', type: 'select', options: ['default', 'success', 'warning', 'destructive'], default: 'default' },
     ],
+    stories: [
+      { title: 'Default', props: { title: 'Info', description: 'Une information importante.' }, code: `<UiAlert title="Info" description="Une information importante." />` },
+      { title: 'Success', props: { variant: 'success', title: 'Succès', description: 'Opération réussie.' }, code: `<UiAlert variant="success" title="Succès" description="Opération réussie." />` },
+      { title: 'Warning', props: { variant: 'warning', title: 'Attention', description: 'Vérifiez avant de continuer.' }, code: `<UiAlert variant="warning" title="Attention" description="Vérifiez avant de continuer." />` },
+      { title: 'Destructive', props: { variant: 'destructive', title: 'Erreur', description: 'Une erreur est survenue.' }, code: `<UiAlert variant="destructive" title="Erreur" description="Une erreur est survenue." />` },
+    ],
+    examples: [],
   },
   {
     slug: 'accordion',
@@ -215,6 +243,7 @@ export const components: ComponentEntry[] = [
     name: 'Navbar',
     group: 'Navigation',
     description: 'Barre de navigation standard avec menu et avatar.',
+    previewHeight: 120,
     examples: [
       {
         title: 'Basique',
@@ -227,6 +256,7 @@ export const components: ComponentEntry[] = [
     name: 'NavbarCentered',
     group: 'Navigation',
     description: 'Navbar avec logo centré et liens de navigation.',
+    previewHeight: 120,
     examples: [
       {
         title: 'Basique',
@@ -239,6 +269,7 @@ export const components: ComponentEntry[] = [
     name: 'NavbarFloating',
     group: 'Navigation',
     description: 'Navbar flottante avec effet glassmorphism.',
+    previewHeight: 160,
     examples: [
       {
         title: 'Basique',
@@ -251,6 +282,7 @@ export const components: ComponentEntry[] = [
     name: 'NavbarMorph',
     group: 'Navigation',
     description: 'Navbar qui se transforme au scroll.',
+    previewHeight: 160,
     examples: [
       {
         title: 'Basique',
@@ -263,6 +295,7 @@ export const components: ComponentEntry[] = [
     name: 'HeroCentric',
     group: 'Sections',
     description: 'Section hero centrée avec CTA.',
+    previewHeight: 500,
     examples: [
       {
         title: 'Basique',
@@ -275,6 +308,7 @@ export const components: ComponentEntry[] = [
     name: 'HeroGlow',
     group: 'Sections',
     description: 'Section hero avec effet de glow gradient.',
+    previewHeight: 500,
     examples: [
       {
         title: 'Basique',
@@ -287,6 +321,7 @@ export const components: ComponentEntry[] = [
     name: 'HeroSplit',
     group: 'Sections',
     description: 'Section hero en deux colonnes texte + visuel.',
+    previewHeight: 500,
     examples: [
       {
         title: 'Basique',
@@ -299,6 +334,7 @@ export const components: ComponentEntry[] = [
     name: 'Faq',
     group: 'Sections',
     description: 'Section FAQ avec accordéons.',
+    previewHeight: 500,
     examples: [
       {
         title: 'Basique',
@@ -347,6 +383,7 @@ export const components: ComponentEntry[] = [
     name: 'DashLayout',
     group: 'Dashboard',
     description: 'Layout de dashboard avec sidebar et navbar.',
+    previewHeight: 600,
     examples: [
       {
         title: 'Basique',
@@ -359,6 +396,7 @@ export const components: ComponentEntry[] = [
     name: 'DashNavbar',
     group: 'Dashboard',
     description: 'Navbar de dashboard avec recherche et actions.',
+    previewHeight: 120,
     examples: [
       {
         title: 'Basique',
@@ -397,15 +435,18 @@ export const landingPages: LandingEntry[] = [
     slug: 'agency',
     name: 'Agency',
     description: 'Landing page agence créative, style éditorial noir & blanc.',
+    previewHeight: 900,
   },
   {
     slug: 'app',
     name: 'App',
     description: 'Landing page SaaS/app moderne avec hero animé.',
+    previewHeight: 900,
   },
   {
     slug: 'saas',
     name: 'SaaS',
     description: 'Landing page SaaS complète avec pricing et features.',
+    previewHeight: 900,
   },
 ]

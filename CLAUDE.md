@@ -1,10 +1,12 @@
 # CLAUDE.md
 
+The app needs to be in English.
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Project Overview
 
 **`@florianjs/mintui`** — A compact UI component library for Nuxt 4 + TailwindCSS with light/dark mode support. It ships as three artifacts:
+
 - `dist/index.mjs` — Tree-shakeable ES component library
 - `dist/nuxt.mjs` — Nuxt module that auto-registers all `Ui*` components with the `Ui` prefix
 - `dist/mcp-server.mjs` — MCP server exposing components and design tokens as tools/resources for AI assistants
@@ -33,12 +35,14 @@ npx vitest run app/components/Ui/NavBar.test.ts
 ### Component structure
 
 All UI components live in `app/components/Ui/`. Each component follows this pattern:
+
 - **`ComponentName.vue`** — The component itself, using `<script setup lang="ts">` with typed `Props` interface, `withDefaults`, `computed` class strings (no class libraries), and `defineOptions({ name: 'UiComponentName' })`.
 - **`ComponentName.test.ts`** — Vitest unit tests using `@vue/test-utils` `mount`.
 
 ### Showcase structure
 
 The Nuxt app itself serves as the interactive showcase (replacing Storybook):
+
 - **`app/showcase/registry.ts`** — Central registry of all components and landing pages (metadata + code examples).
 - **`app/showcase/demos/*.vue`** — One demo Vue file per component slug (e.g. `button.vue`). Used both as live preview (component import) and as code display (`?raw` import).
 - **`app/components/Showcase/`** — Showcase UI: `Sidebar.vue`, `ComponentViewer.vue`, `CodeBlock.vue`, `DarkModeToggle.vue`.
@@ -70,11 +74,13 @@ Dark mode is toggled by adding the `dark` class to an ancestor element (class-ba
 ### Testing setup
 
 Vitest is configured in `vitest.config.ts` with a single project:
+
 - **unit** — jsdom environment for `*.test.ts` files under `app/`.
 
 ### Exporting new components
 
 When adding a new component `Foo`:
+
 1. Create `app/components/Ui/Foo.vue` with `defineOptions({ name: 'UiFoo' })`.
 2. Add `export { default as UiFoo } from '../app/components/Ui/Foo.vue'` to `src/index.ts`.
 3. Create `app/showcase/demos/foo.vue` — a clean demo showing the component in action.

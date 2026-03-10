@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { ref, inject } from 'vue'
+import { ref, inject, computed } from 'vue'
 import type { Ref } from 'vue'
 import type { ComponentEntry } from '~/showcase/registry'
 
 const props = defineProps<{
   entry: ComponentEntry
-  demoComponent: any
   rawCode: string
 }>()
 
@@ -13,8 +12,12 @@ const activeTab = ref<'preview' | 'code'>('preview')
 const isDark = inject<Ref<boolean>>('previewDark', ref(false))
 
 const previewContainer = ref<HTMLElement | null>(null)
-const previewHeight = ref(300)
-const previewWidth = ref<number | null>(null) // null = flex-1 (pleine largeur)
+const previewHeight = ref(props.entry.previewHeight ?? 300)
+const previewWidth = ref<number | null>(props.entry.previewWidth ?? null)
+
+const iframeSrc = computed(() =>
+  `/preview/${props.entry.slug}${isDark.value ? '?dark=1' : ''}`
+)
 
 function startResizeHeight(e: MouseEvent) {
   e.preventDefault()
@@ -50,10 +53,14 @@ function startResizeWidth(e: MouseEvent) {
 function resetWidth() {
   previewWidth.value = null
 }
+
+const hasControls = computed(() => !!props.entry.controls?.length && !!props.entry.componentName)
+const hasStories = computed(() => !!props.entry.stories?.length)
+const hasExamples = computed(() => !!props.entry.examples?.length)
 </script>
 
 <template>
-  <div class="space-y-6">
+  <div class="space-y-8">
     <!-- Header -->
     <div>
       <div class="flex items-center gap-2 mb-1">
@@ -63,83 +70,122 @@ function resetWidth() {
       <p class="text-muted-foreground mt-1">{{ entry.description }}</p>
     </div>
 
-    <!-- Preview / Code tabs -->
-    <div class="rounded-xl border border-border overflow-hidden">
-      <!-- Tab bar -->
-      <div class="flex items-center border-b border-border bg-muted/30">
-        <button
-          @click="activeTab = 'preview'"
-          :class="[
-            'px-4 py-2.5 text-sm font-medium transition-colors border-b-2 -mb-px',
-            activeTab === 'preview'
-              ? 'border-primary text-foreground'
-              : 'border-transparent text-muted-foreground hover:text-foreground'
-          ]"
+    <!-- Controls playground (Default) -->
+    <div v-if="hasControls">
+      <div class="flex items-center gap-3 mb-4">
+        <h2 class="text-sm font-semibold text-foreground uppercase tracking-wider">Default</h2>
+        <span class="h-px flex-1 bg-border" />
+      </div>
+      <ShowcaseControls
+        :component-name="entry.componentName!"
+        :controls="entry.controls!"
+        :is-dark="isDark"
+      />
+    </div>
+
+    <!-- Stories (isolated variants) -->
+    <div v-if="hasStories">
+      <div class="flex items-center gap-3 mb-4">
+        <h2 class="text-sm font-semibold text-foreground uppercase tracking-wider">Variantes</h2>
+        <span class="h-px flex-1 bg-border" />
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <ShowcaseStory
+          v-for="story in entry.stories"
+          :key="story.title"
+          :story="story"
+          :component-name="entry.componentName"
+          :is-dark="isDark"
+        />
+      </div>
+    </div>
+
+    <!-- iframe preview (Vue d'ensemble) -->
+    <div>
+      <div class="flex items-center gap-3 mb-4">
+        <h2 class="text-sm font-semibold text-foreground uppercase tracking-wider">
+          {{ hasControls || hasStories ? 'Vue d\'ensemble' : 'Aperçu' }}
+        </h2>
+        <span class="h-px flex-1 bg-border" />
+      </div>
+
+      <div class="rounded-xl border border-border overflow-hidden">
+        <!-- Tab bar -->
+        <div class="flex items-center border-b border-border bg-muted/30">
+          <button
+            @click="activeTab = 'preview'"
+            :class="[
+              'px-4 py-2.5 text-sm font-medium transition-colors border-b-2 -mb-px',
+              activeTab === 'preview'
+                ? 'border-primary text-foreground'
+                : 'border-transparent text-muted-foreground hover:text-foreground'
+            ]"
+          >
+            Aperçu
+          </button>
+          <button
+            @click="activeTab = 'code'"
+            :class="[
+              'px-4 py-2.5 text-sm font-medium transition-colors border-b-2 -mb-px',
+              activeTab === 'code'
+                ? 'border-primary text-foreground'
+                : 'border-transparent text-muted-foreground hover:text-foreground'
+            ]"
+          >
+            Code démo
+          </button>
+          <div v-if="activeTab === 'preview' && previewWidth !== null" class="ml-auto flex items-center gap-2 pr-3">
+            <span class="text-xs text-muted-foreground font-mono">{{ previewWidth }}px</span>
+            <button @click="resetWidth" class="text-xs text-muted-foreground hover:text-foreground transition-colors">↔ reset</button>
+          </div>
+        </div>
+
+        <!-- Preview pane (iframe) -->
+        <div
+          v-show="activeTab === 'preview'"
+          ref="previewContainer"
+          :style="{ height: previewHeight + 'px' }"
+          class="flex overflow-hidden bg-muted/10"
         >
-          Aperçu
-        </button>
-        <button
-          @click="activeTab = 'code'"
-          :class="[
-            'px-4 py-2.5 text-sm font-medium transition-colors border-b-2 -mb-px',
-            activeTab === 'code'
-              ? 'border-primary text-foreground'
-              : 'border-transparent text-muted-foreground hover:text-foreground'
-          ]"
-        >
-          Code démo
-        </button>
-        <!-- Width indicator + reset -->
-        <div v-if="activeTab === 'preview' && previewWidth !== null" class="ml-auto flex items-center gap-2 pr-3">
-          <span class="text-xs text-muted-foreground font-mono">{{ previewWidth }}px</span>
-          <button @click="resetWidth" class="text-xs text-muted-foreground hover:text-foreground transition-colors">↔ reset</button>
+          <iframe
+            :src="iframeSrc"
+            :style="previewWidth !== null ? { width: previewWidth + 'px' } : {}"
+            :class="previewWidth !== null ? 'shrink-0' : 'flex-1'"
+            class="h-full border-none bg-background"
+            title="Component preview"
+          />
+
+          <!-- Right resize handle -->
+          <div
+            @mousedown="startResizeWidth"
+            class="w-2.5 h-full cursor-col-resize flex items-center justify-center group shrink-0 border-l border-border bg-muted/20 hover:bg-primary/10 transition-colors"
+          >
+            <div class="w-px h-8 rounded-full bg-muted-foreground/30 group-hover:bg-primary/50 transition-colors"></div>
+          </div>
+        </div>
+
+        <!-- Code pane -->
+        <div v-show="activeTab === 'code'">
+          <ShowcaseCodeBlock :code="rawCode" />
         </div>
       </div>
 
-      <!-- Preview pane -->
+      <!-- Bottom resize handle -->
       <div
-        v-show="activeTab === 'preview'"
-        ref="previewContainer"
-        :style="{ height: previewHeight + 'px' }"
-        class="flex overflow-hidden"
+        v-if="activeTab === 'preview'"
+        @mousedown="startResizeHeight"
+        class="flex items-center justify-center h-4 -mt-4 cursor-row-resize group select-none"
       >
-        <!-- Content -->
-        <div
-          :class="[isDark ? 'dark' : '', previewWidth !== null ? 'shrink-0' : 'flex-1']"
-          :style="previewWidth !== null ? { width: previewWidth + 'px' } : {}"
-          class="h-full overflow-auto bg-background p-8 flex items-start justify-start"
-        >
-          <component :is="demoComponent" v-if="demoComponent" />
-          <div v-else class="text-muted-foreground text-sm">Démo non disponible</div>
-        </div>
-
-        <!-- Right resize handle -->
-        <div
-          @mousedown="startResizeWidth"
-          class="w-2.5 h-full cursor-col-resize flex items-center justify-center group shrink-0 border-l border-border bg-muted/20 hover:bg-primary/10 transition-colors"
-        >
-          <div class="w-px h-8 rounded-full bg-muted-foreground/30 group-hover:bg-primary/50 transition-colors"></div>
-        </div>
-      </div>
-
-      <!-- Code pane -->
-      <div v-show="activeTab === 'code'">
-        <ShowcaseCodeBlock :code="rawCode" />
+        <div class="w-12 h-1 rounded-full bg-muted-foreground/20 group-hover:bg-muted-foreground/50 transition-colors"></div>
       </div>
     </div>
 
-    <!-- Bottom resize handle -->
-    <div
-      v-if="activeTab === 'preview'"
-      @mousedown="startResizeHeight"
-      class="flex items-center justify-center h-4 -mt-4 cursor-row-resize group select-none"
-    >
-      <div class="w-12 h-1 rounded-full bg-muted-foreground/20 group-hover:bg-muted-foreground/50 transition-colors"></div>
-    </div>
-
-    <!-- Examples / Usage snippets -->
-    <div v-if="entry.examples.length > 0">
-      <h2 class="text-lg font-semibold text-foreground mb-4">Exemples d'utilisation</h2>
+    <!-- Usage examples (code snippets) -->
+    <div v-if="hasExamples">
+      <div class="flex items-center gap-3 mb-4">
+        <h2 class="text-sm font-semibold text-foreground uppercase tracking-wider">Exemples d'utilisation</h2>
+        <span class="h-px flex-1 bg-border" />
+      </div>
       <div class="space-y-4">
         <div v-for="(example, i) in entry.examples" :key="i">
           <h3 class="text-sm font-medium text-foreground mb-2">{{ example.title }}</h3>

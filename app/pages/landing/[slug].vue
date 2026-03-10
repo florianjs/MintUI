@@ -29,8 +29,8 @@ const fullscreen = ref(false)
 const isDark = inject<Ref<boolean>>('previewDark', ref(false))
 
 const previewContainer = ref<HTMLElement | null>(null)
-const previewHeight = ref(600)
-const previewWidth = ref<number | null>(null)
+const previewHeight = ref(entry.value?.previewHeight ?? 600)
+const previewWidth = ref<number | null>(entry.value?.previewWidth ?? null)
 
 function startResizeHeight(e: MouseEvent) {
   e.preventDefault()
