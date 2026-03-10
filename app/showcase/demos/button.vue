@@ -21,6 +21,8 @@
             <UiButton variant="positive">Positive</UiButton>
           </div>
         </div>
+      </div>
+    </div>
     <div>
       <p class="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-3">Tailles</p>
       <div class="flex flex-wrap items-center gap-3">
