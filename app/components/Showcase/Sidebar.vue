@@ -107,7 +107,6 @@ function handleMouseLeave() {
 
       <!-- Nav -->
       <nav class="flex-1 overflow-y-auto py-4 px-3 space-y-6">
-        <!-- Component groups -->
         <div v-for="group in filteredNavGroups" :key="group.label">
           <p class="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider px-2 mb-1">
             {{ group.label }}

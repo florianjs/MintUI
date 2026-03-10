@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, defineAsyncComponent, ref, inject } from 'vue'
+import { computed, defineAsyncComponent, ref, inject, onUnmounted } from 'vue'
 import type { Ref } from 'vue'
 import { landingPages } from '~/showcase/registry'
 
@@ -31,36 +31,55 @@ const isDark = inject<Ref<boolean>>('previewDark', ref(false))
 const previewContainer = ref<HTMLElement | null>(null)
 const previewHeight = ref(entry.value?.previewHeight ?? 600)
 const previewWidth = ref<number | null>(entry.value?.previewWidth ?? null)
+const isResizing = ref(false)
+
+let resizeHandler: ((ev: MouseEvent) => void) | null = null
+
+function cleanupResize() {
+  if (resizeHandler) {
+    document.removeEventListener('mousemove', resizeHandler)
+    resizeHandler = null
+  }
+  document.removeEventListener('mouseup', stopResize)
+  window.removeEventListener('blur', stopResize)
+  isResizing.value = false
+}
+
+function stopResize() {
+  cleanupResize()
+}
+
+onUnmounted(() => {
+  cleanupResize()
+})
 
 function startResizeHeight(e: MouseEvent) {
   e.preventDefault()
+  cleanupResize()
+  isResizing.value = true
   const startY = e.clientY
   const startH = previewHeight.value
-  function onMove(ev: MouseEvent) {
+  resizeHandler = (ev: MouseEvent) => {
     previewHeight.value = Math.max(200, startH + ev.clientY - startY)
   }
-  function onUp() {
-    window.removeEventListener('mousemove', onMove)
-    window.removeEventListener('mouseup', onUp)
-  }
-  window.addEventListener('mousemove', onMove)
-  window.addEventListener('mouseup', onUp)
+  document.addEventListener('mousemove', resizeHandler)
+  document.addEventListener('mouseup', stopResize)
+  window.addEventListener('blur', stopResize)
 }
 
 function startResizeWidth(e: MouseEvent) {
   e.preventDefault()
+  cleanupResize()
+  isResizing.value = true
   const startX = e.clientX
   const startW = previewWidth.value ?? (previewContainer.value!.offsetWidth - 10)
-  function onMove(ev: MouseEvent) {
+  resizeHandler = (ev: MouseEvent) => {
     const cw = previewContainer.value!.offsetWidth
     previewWidth.value = Math.min(cw - 10, Math.max(320, startW + ev.clientX - startX))
   }
-  function onUp() {
-    window.removeEventListener('mousemove', onMove)
-    window.removeEventListener('mouseup', onUp)
-  }
-  window.addEventListener('mousemove', onMove)
-  window.addEventListener('mouseup', onUp)
+  document.addEventListener('mousemove', resizeHandler)
+  document.addEventListener('mouseup', stopResize)
+  window.addEventListener('blur', stopResize)
 }
 
 function resetWidth() {
@@ -154,9 +173,9 @@ function resetWidth() {
       <!-- Bottom resize handle -->
       <div
         @mousedown="startResizeHeight"
-        class="flex items-center justify-center h-4 mb-4 cursor-row-resize group select-none"
+        class="flex items-center justify-center h-2.5 cursor-row-resize group select-none border-t border-border bg-muted/20 hover:bg-primary/10 transition-colors"
       >
-        <div class="w-12 h-1 rounded-full bg-muted-foreground/20 group-hover:bg-muted-foreground/50 transition-colors"></div>
+        <div class="w-8 h-px rounded-full bg-muted-foreground/30 group-hover:bg-primary/50 transition-colors"></div>
       </div>
 
       <!-- Usage -->

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, inject, computed } from 'vue'
+import { ref, inject, computed, onMounted, onUnmounted } from 'vue'
 import type { Ref } from 'vue'
 import type { ComponentEntry } from '~/showcase/registry'
 
@@ -14,40 +14,75 @@ const isDark = inject<Ref<boolean>>('previewDark', ref(false))
 const previewContainer = ref<HTMLElement | null>(null)
 const previewHeight = ref(props.entry.previewHeight ?? 300)
 const previewWidth = ref<number | null>(props.entry.previewWidth ?? null)
+const isResizing = ref(false)
+const iframeLoaded = ref(false)
 
 const iframeSrc = computed(() =>
   `/preview/${props.entry.slug}${isDark.value ? '?dark=1' : ''}`
 )
 
+let resizeHandler: ((ev: MouseEvent) => void) | null = null
+
+onMounted(() => {
+  if (!previewContainer.value) return
+  const observer = new IntersectionObserver(
+    (entries) => {
+      if (entries[0].isIntersecting) {
+        iframeLoaded.value = true
+        observer.disconnect()
+      }
+    },
+    { rootMargin: '100px' }
+  )
+  observer.observe(previewContainer.value)
+  onUnmounted(() => observer.disconnect())
+})
+
+onUnmounted(() => {
+  cleanupResize()
+})
+
+function cleanupResize() {
+  if (resizeHandler) {
+    document.removeEventListener('mousemove', resizeHandler)
+    resizeHandler = null
+  }
+  document.removeEventListener('mouseup', stopResize)
+  window.removeEventListener('blur', stopResize)
+  isResizing.value = false
+}
+
+function stopResize() {
+  cleanupResize()
+}
+
 function startResizeHeight(e: MouseEvent) {
   e.preventDefault()
+  cleanupResize()
+  isResizing.value = true
   const startY = e.clientY
   const startH = previewHeight.value
-  function onMove(ev: MouseEvent) {
+  resizeHandler = (ev: MouseEvent) => {
     previewHeight.value = Math.max(120, startH + ev.clientY - startY)
   }
-  function onUp() {
-    window.removeEventListener('mousemove', onMove)
-    window.removeEventListener('mouseup', onUp)
-  }
-  window.addEventListener('mousemove', onMove)
-  window.addEventListener('mouseup', onUp)
+  document.addEventListener('mousemove', resizeHandler)
+  document.addEventListener('mouseup', stopResize)
+  window.addEventListener('blur', stopResize)
 }
 
 function startResizeWidth(e: MouseEvent) {
   e.preventDefault()
+  cleanupResize()
+  isResizing.value = true
   const startX = e.clientX
   const startW = previewWidth.value ?? (previewContainer.value!.offsetWidth - 10)
-  function onMove(ev: MouseEvent) {
+  resizeHandler = (ev: MouseEvent) => {
     const cw = previewContainer.value!.offsetWidth
     previewWidth.value = Math.min(cw - 10, Math.max(280, startW + ev.clientX - startX))
   }
-  function onUp() {
-    window.removeEventListener('mousemove', onMove)
-    window.removeEventListener('mouseup', onUp)
-  }
-  window.addEventListener('mousemove', onMove)
-  window.addEventListener('mouseup', onUp)
+  document.addEventListener('mousemove', resizeHandler)
+  document.addEventListener('mouseup', stopResize)
+  window.addEventListener('blur', stopResize)
 }
 
 function resetWidth() {
@@ -87,7 +122,7 @@ const hasExamples = computed(() => !!props.entry.examples?.length)
     <!-- Stories (isolated variants) -->
     <div v-if="hasStories">
       <div class="flex items-center gap-3 mb-4">
-        <h2 class="text-sm font-semibold text-foreground uppercase tracking-wider">Variantes</h2>
+        <h2 class="text-sm font-semibold text-foreground uppercase tracking-wider">Variants</h2>
         <span class="h-px flex-1 bg-border" />
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -105,7 +140,7 @@ const hasExamples = computed(() => !!props.entry.examples?.length)
     <div>
       <div class="flex items-center gap-3 mb-4">
         <h2 class="text-sm font-semibold text-foreground uppercase tracking-wider">
-          {{ hasControls || hasStories ? 'Vue d\'ensemble' : 'Aperçu' }}
+          {{ hasControls || hasStories ? 'Overview' : 'Preview' }}
         </h2>
         <span class="h-px flex-1 bg-border" />
       </div>
@@ -122,7 +157,7 @@ const hasExamples = computed(() => !!props.entry.examples?.length)
                 : 'border-transparent text-muted-foreground hover:text-foreground'
             ]"
           >
-            Aperçu
+            Preview
           </button>
           <button
             @click="activeTab = 'code'"
@@ -133,7 +168,7 @@ const hasExamples = computed(() => !!props.entry.examples?.length)
                 : 'border-transparent text-muted-foreground hover:text-foreground'
             ]"
           >
-            Code démo
+            Demo code
           </button>
           <div v-if="activeTab === 'preview' && previewWidth !== null" class="ml-auto flex items-center gap-2 pr-3">
             <span class="text-xs text-muted-foreground font-mono">{{ previewWidth }}px</span>
@@ -149,9 +184,13 @@ const hasExamples = computed(() => !!props.entry.examples?.length)
           class="flex overflow-hidden bg-muted/10"
         >
           <iframe
+            v-if="iframeLoaded"
             :src="iframeSrc"
             :style="previewWidth !== null ? { width: previewWidth + 'px' } : {}"
-            :class="previewWidth !== null ? 'shrink-0' : 'flex-1'"
+            :class="[
+              previewWidth !== null ? 'shrink-0' : 'flex-1',
+              isResizing ? 'pointer-events-none' : ''
+            ]"
             class="h-full border-none bg-background"
             title="Component preview"
           />
@@ -175,16 +214,16 @@ const hasExamples = computed(() => !!props.entry.examples?.length)
       <div
         v-if="activeTab === 'preview'"
         @mousedown="startResizeHeight"
-        class="flex items-center justify-center h-4 -mt-4 cursor-row-resize group select-none"
+        class="flex items-center justify-center h-2.5 cursor-row-resize group select-none border-t border-border bg-muted/20 hover:bg-primary/10 transition-colors"
       >
-        <div class="w-12 h-1 rounded-full bg-muted-foreground/20 group-hover:bg-muted-foreground/50 transition-colors"></div>
+        <div class="w-8 h-px rounded-full bg-muted-foreground/30 group-hover:bg-primary/50 transition-colors"></div>
       </div>
     </div>
 
     <!-- Usage examples (code snippets) -->
     <div v-if="hasExamples">
       <div class="flex items-center gap-3 mb-4">
-        <h2 class="text-sm font-semibold text-foreground uppercase tracking-wider">Exemples d'utilisation</h2>
+        <h2 class="text-sm font-semibold text-foreground uppercase tracking-wider">Usage examples</h2>
         <span class="h-px flex-1 bg-border" />
       </div>
       <div class="space-y-4">

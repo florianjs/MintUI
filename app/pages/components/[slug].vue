@@ -31,7 +31,7 @@ watchEffect(async () => {
       />
     </div>
     <div v-else class="text-muted-foreground">
-      Composant « {{ slug }} » introuvable.
+      Component "{{ slug }}" not found.
     </div>
   </div>
 </template>

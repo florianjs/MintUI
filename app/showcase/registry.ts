@@ -400,7 +400,14 @@ export const components: ComponentEntry[] = [
     examples: [
       {
         title: 'Basic',
-        code: `<UiStat />`,
+        code: `<UiStat
+  title="Total Revenue"
+  :value="45231"
+  prefix="$"
+  format="compact"
+  trend="up"
+  trend-value="+12.5%"
+/>`,
       },
     ],
   },
@@ -412,7 +419,24 @@ export const components: ComponentEntry[] = [
     examples: [
       {
         title: 'Basic',
-        code: `<UiTable />`,
+        code: `<UiTable
+  :columns="columns"
+  :data="data"
+  row-key="id"
+  default-sort-key="name"
+/>
+
+<script setup>
+const columns = [
+  { key: 'name', label: 'Name', sortable: true },
+  { key: 'email', label: 'Email', sortable: true },
+  { key: 'role', label: 'Role' },
+]
+const data = [
+  { id: 1, name: 'John Doe', email: 'john@example.com', role: 'Admin' },
+  { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'User' },
+]
+<\/script>`,
       },
     ],
   },
@@ -424,7 +448,17 @@ export const components: ComponentEntry[] = [
     examples: [
       {
         title: 'Basic',
-        code: `<UiChart />`,
+        code: `<UiChart
+  type="area"
+  :series="series"
+  :options="{ xaxis: { categories: ['Jan', 'Feb', 'Mar'] } }"
+/>
+
+<script setup>
+const series = [
+  { name: 'Revenue', data: [3100, 4000, 2800] },
+]
+<\/script>`,
       },
     ],
   },
