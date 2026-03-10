@@ -1,6 +1,6 @@
 # 🌿 MintUI
 
-Made with this awesome [$10 Coding AI + OpenCode](https://z.ai/subscribe?ic=SVEALL4DWW) 🚀
+Made with this awesome [$10 Coding AI + OpenCode](https://z.ai/subscribe?ic=SVEALL4DWW) 🚀 *(+10% off via this link!)*
 
 Stop burning tokens. Build faster.
 
