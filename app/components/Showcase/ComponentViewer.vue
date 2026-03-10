@@ -54,7 +54,7 @@ function resetWidth() {
   previewWidth.value = null
 }
 
-const hasControls = computed(() => !!props.entry.controls?.length && !!props.entry.componentName)
+const hasControls = computed(() => !!props.entry.controls?.length && !!props.entry.component)
 const hasStories = computed(() => !!props.entry.stories?.length)
 const hasExamples = computed(() => !!props.entry.examples?.length)
 </script>
@@ -78,6 +78,7 @@ const hasExamples = computed(() => !!props.entry.examples?.length)
       </div>
       <ShowcaseControls
         :component-name="entry.componentName!"
+        :component="entry.component!"
         :controls="entry.controls!"
         :is-dark="isDark"
       />
@@ -94,7 +95,7 @@ const hasExamples = computed(() => !!props.entry.examples?.length)
           v-for="story in entry.stories"
           :key="story.title"
           :story="story"
-          :component-name="entry.componentName"
+          :component="entry.component"
           :is-dark="isDark"
         />
       </div>

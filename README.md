@@ -8,7 +8,7 @@ MintUI isn’t just another UI kit. It’s a productivity framework for Nuxt 4 +
 
 - Token-Efficient: Building frontends from scratch drains your AI credits. MintUI provides a rock-solid foundation that your AI (Copilot, Claude, Cursor) understands instantly through its built-in MCP server.
 
-- The "White-Label" Starter: Use it out of the box, or gut it to launch your own NPM library in minutes—with Storybook and OIDC publishing already wired up.
+- The "White-Label" Starter: Use it out of the box, or gut it to launch your own NPM library in minutes—with a built-in component showcase and OIDC publishing already wired up.
 
 - Opinionated UX: My personal component set. Compact, modern, and zero-fluff. Built for devs who want to ship, not fiddle with CSS variables all day.
 
@@ -53,14 +53,14 @@ All components automatically adapt to light and dark themes via CSS variables.
 # Install dependencies
 npm install
 
-# Start Storybook
-npm run storybook
+# Start the showcase (Nuxt dev server)
+npm run dev
 
 # Build component library
 npm run build:lib
 
-# Build Storybook static site
-npm run build-storybook
+# Generate static showcase
+npm run generate
 ```
 
 ## Publishing to npm
@@ -144,7 +144,7 @@ The package includes an MCP server that gives your AI assistant (Copilot, Claude
 | ------------------- | --------------------------------------------------- |
 | `list_components`   | All components with props & variants                |
 | `get_component`     | Source code + stories + props for a given component |
-| `get_usage_example` | Copy-paste examples extracted from Storybook        |
+| `get_usage_example` | Copy-paste usage examples for a given component     |
 | `search_components` | Keyword search across source & stories              |
 | `get_design_tokens` | CSS variables (light/dark)                          |
 

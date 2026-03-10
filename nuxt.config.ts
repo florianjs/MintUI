@@ -10,5 +10,13 @@ export default defineNuxtConfig({
       title: 'MintUI — Component Library',
       meta: [{ name: 'description', content: 'A compact UI component library for Nuxt 4 + TailwindCSS' }]
     }
-  }
+  },
+  routeRules: {
+    '/preview/**': {
+      headers: {
+        'X-Frame-Options': 'SAMEORIGIN',
+        'Content-Security-Policy': "frame-ancestors 'self'",
+      },
+    },
+  },
 });

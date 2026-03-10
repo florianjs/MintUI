@@ -85,7 +85,7 @@ function resetWidth() {
             <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
               <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/>
             </svg>
-            Quitter le plein écran
+            Exit fullscreen
           </button>
         </div>
         <component :is="landingComponent" v-if="landingComponent" />
@@ -110,7 +110,7 @@ function resetWidth() {
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
               <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
             </svg>
-            Plein écran
+            Fullscreen
           </button>
         </div>
       </div>
@@ -123,7 +123,7 @@ function resetWidth() {
             <div class="h-3 w-3 rounded-full bg-yellow-400/60"></div>
             <div class="h-3 w-3 rounded-full bg-green-400/60"></div>
           </div>
-          <span class="text-xs text-muted-foreground font-mono flex-1 text-center">Aperçu</span>
+          <span class="text-xs text-muted-foreground font-mono flex-1 text-center">Preview</span>
           <div v-if="previewWidth !== null" class="flex items-center gap-2">
             <span class="text-xs text-muted-foreground font-mono">{{ previewWidth }}px</span>
             <button @click="resetWidth" class="text-xs text-muted-foreground hover:text-foreground transition-colors">↔ reset</button>
@@ -161,12 +161,12 @@ function resetWidth() {
 
       <!-- Usage -->
       <div>
-        <h2 class="text-lg font-semibold text-foreground mb-3">Utilisation</h2>
+        <h2 class="text-lg font-semibold text-foreground mb-3">Usage</h2>
         <ShowcaseCodeBlock :code="usageCode" />
       </div>
     </div>
   </div>
   <div v-else class="px-8 py-10 text-muted-foreground">
-    Landing page « {{ slug }} » introuvable.
+    Landing page "{{ slug }}" not found.
   </div>
 </template>

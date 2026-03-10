@@ -1,16 +1,15 @@
 <script setup lang="ts">
-import { ref, computed, resolveComponent } from 'vue'
+import { ref, computed } from 'vue'
 import type { Story } from '~/showcase/registry'
 
 const props = defineProps<{
   story: Story
-  componentName?: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  component?: any
   isDark?: boolean
 }>()
 
-const hasLivePreview = computed(() => !!props.componentName && props.story.props !== undefined)
-
-const component = props.componentName ? resolveComponent(props.componentName) : null
+const hasLivePreview = computed(() => !!props.component && props.story.props !== undefined)
 
 const showCode = ref(false)
 </script>

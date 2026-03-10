@@ -1,14 +1,14 @@
 <template>
   <div class="divide-y divide-border rounded-lg border">
-    <UiAccordion title="Comment installer MintUI ?">
-      Installez via npm : <code class="bg-muted px-1 rounded text-sm">npm install @florianjs/mintui</code>
+    <UiAccordion title="How to install MintUI?">
+      Install via npm: <code class="bg-muted px-1 rounded text-sm">npm install @florianjs/mintui</code>
     </UiAccordion>
-    <UiAccordion title="Supporte le dark mode ?" :default-open="true">
-      Oui. Ajoutez la classe <code class="bg-muted px-1 rounded text-sm">dark</code> à un élément parent.
-      MintUI utilise la stratégie class-based de TailwindCSS.
+    <UiAccordion title="Does it support dark mode?" :default-open="true">
+      Yes. Add the <code class="bg-muted px-1 rounded text-sm">dark</code> class to a parent element.
+      MintUI uses TailwindCSS class-based strategy.
     </UiAccordion>
-    <UiAccordion title="Compatible avec Nuxt 4 ?">
-      Absolument. MintUI est conçu spécifiquement pour Nuxt 4 avec auto-import des composants.
+    <UiAccordion title="Is it compatible with Nuxt 4?">
+      Absolutely. MintUI is designed specifically for Nuxt 4 with auto-import of components.
     </UiAccordion>
   </div>
 </template>

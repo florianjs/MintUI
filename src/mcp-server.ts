@@ -11,6 +11,7 @@ const __dirname = dirname(__filename);
 // Resolve directories relative to this file (dist/mcp-server.mjs → …/)
 const PKG_ROOT = join(__dirname, '..');
 const COMPONENTS_DIR = join(PKG_ROOT, 'app', 'components', 'Ui');
+const DEMOS_DIR = join(PKG_ROOT, 'app', 'showcase', 'demos');
 const CSS_DIR = join(PKG_ROOT, 'app', 'assets', 'css');
 
 // Read package.json for dynamic naming
@@ -22,10 +23,17 @@ const PKG_VERSION: string = pkg.version;
 
 interface ComponentInfo {
   name: string; // e.g. "Button"
+  slug: string; // e.g. "button", "navbar-centered"
   source: string; // .vue file content
-  stories: string | null; // .stories.ts file content
+  demo: string | null; // showcase demo file content
   props: string[]; // extracted prop lines
   variants: string[]; // extracted variant values
+}
+
+function toKebabSlug(name: string): string {
+  return name.replace(/([A-Z])/g, (c, _m, offset) =>
+    offset === 0 ? c.toLowerCase() : '-' + c.toLowerCase(),
+  );
 }
 
 function parseProps(source: string): string[] {
@@ -57,22 +65,28 @@ function loadComponents(): Map<string, ComponentInfo> {
 
   const files: string[] = readdirSync(COMPONENTS_DIR);
 
-  // Group by component name (Button.vue + Button.stories.ts → "Button")
+  // Filter component .vue files (exclude test files)
   const vueFiles = files.filter((f) => f.endsWith('.vue'));
+
+  const demoFiles = existsSync(DEMOS_DIR)
+    ? new Set(readdirSync(DEMOS_DIR))
+    : new Set<string>();
 
   for (const vueFile of vueFiles) {
     const name = vueFile.replace('.vue', '');
+    const slug = toKebabSlug(name);
     const source = readFileSync(join(COMPONENTS_DIR, vueFile), 'utf-8');
 
-    const storiesFile = `${name}.stories.ts`;
-    const stories = files.includes(storiesFile)
-      ? readFileSync(join(COMPONENTS_DIR, storiesFile), 'utf-8')
+    const demoFile = `${slug}.vue`;
+    const demo = demoFiles.has(demoFile)
+      ? readFileSync(join(DEMOS_DIR, demoFile), 'utf-8')
       : null;
 
-    components.set(name.toLowerCase(), {
+    components.set(slug, {
       name,
+      slug,
       source,
-      stories,
+      demo,
       props: parseProps(source),
       variants: parseVariants(source),
     });
@@ -110,18 +124,18 @@ for (const [slug, comp] of components) {
     }),
   );
 
-  if (comp.stories) {
-    const storiesText = comp.stories;
+  if (comp.demo) {
+    const demoText = comp.demo;
     server.registerResource(
-      `${comp.name}.stories.ts`,
-      `${PKG_NAME}://components/${slug}/stories`,
+      `${comp.slug}.demo.vue`,
+      `${PKG_NAME}://components/${slug}/demo`,
       {
-        description: `Storybook stories for Ui${comp.name}`,
+        description: `Showcase demo for Ui${comp.name}`,
         mimeType: 'text/plain',
       },
       async (uri) => ({
         contents: [
-          { uri: uri.href, mimeType: 'text/plain', text: storiesText },
+          { uri: uri.href, mimeType: 'text/plain', text: demoText },
         ],
       }),
     );
@@ -146,7 +160,7 @@ server.registerTool(
   'get_component',
   {
     description:
-      'Get the full Vue source code and Storybook stories for a UI component. Returns the .vue file, .stories.ts file, extracted props, and variants.',
+      'Get the full Vue source code and showcase demo for a UI component. Returns the .vue source, extracted props, variants, and demo usage.',
     inputSchema: {
       component: z
         .string()
@@ -188,12 +202,12 @@ server.registerTool(
       '```',
     ];
 
-    if (comp.stories) {
+    if (comp.demo) {
       sections.push(
         '',
-        `## Stories (${comp.name}.stories.ts)`,
-        '```ts',
-        comp.stories,
+        `## Demo (${comp.slug}.vue)`,
+        '```vue',
+        comp.demo,
         '```',
       );
     }
@@ -263,7 +277,7 @@ server.registerTool(
 
       for (const [label, text] of [
         [`${comp.name}.vue`, comp.source],
-        [`${comp.name}.stories.ts`, comp.stories || ''],
+        [`${comp.slug}.demo.vue`, comp.demo || ''],
       ] as const) {
         const lines = text.split('\n');
         for (let i = 0; i < lines.length; i++) {
@@ -300,7 +314,7 @@ server.registerTool(
   'get_usage_example',
   {
     description:
-      'Get a ready-to-use code example for a component, extracted from its Storybook stories.',
+      'Get a ready-to-use code example for a component, from its showcase demo file.',
     inputSchema: {
       component: z.string().describe('Component name (e.g. "button", "card")'),
     },
@@ -320,30 +334,24 @@ server.registerTool(
       };
     }
 
-    if (!comp.stories) {
+    if (!comp.demo) {
       return {
         content: [
           {
             type: 'text',
-            text: `No stories found for Ui${comp.name}. Basic usage:\n\n\`\`\`vue\n<template>\n  <Ui${comp.name}>\n    Content\n  </Ui${comp.name}>\n</template>\n\`\`\``,
+            text: `No demo found for Ui${comp.name}. Basic usage:\n\n\`\`\`vue\n<template>\n  <Ui${comp.name} />\n</template>\n\`\`\``,
           },
         ],
       };
     }
 
-    // Extract template strings from stories
-    const templates = comp.stories.matchAll(/template:\s*[`']([^`']+)[`']/g);
-    const examples: string[] = [];
-    for (const m of templates) {
-      examples.push(m[1].trim());
-    }
-
-    const text = examples.length
-      ? `# Ui${comp.name} — Usage Examples\n\n${examples.map((e, i) => `### Example ${i + 1}\n\`\`\`vue\n<template>\n  ${e}\n</template>\n\`\`\``).join('\n\n')}`
-      : `No template examples found in stories. Full stories:\n\n\`\`\`ts\n${comp.stories}\n\`\`\``;
-
     return {
-      content: [{ type: 'text', text }],
+      content: [
+        {
+          type: 'text',
+          text: `# Ui${comp.name} — Demo\n\n\`\`\`vue\n${comp.demo}\n\`\`\``,
+        },
+      ],
     };
   },
 );

@@ -30,7 +30,7 @@ const filteredLandings = computed(() => {
         MintUI Components
       </h1>
       <p class="text-muted-foreground text-lg">
-        Composants prêts à l'emploi pour Nuxt 4 + TailwindCSS.
+        Ready-to-use components for Nuxt 4 + TailwindCSS.
       </p>
     </div>
 
@@ -42,7 +42,7 @@ const filteredLandings = computed(() => {
       <input
         v-model="search"
         type="search"
-        placeholder="Rechercher un composant..."
+        placeholder="Search for a component..."
         class="w-full max-w-xs pl-9 pr-4 py-2 text-sm rounded-lg border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors"
       />
     </div>

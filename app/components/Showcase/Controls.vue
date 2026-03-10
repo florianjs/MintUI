@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { ref, computed, resolveComponent } from 'vue'
+import { ref, computed } from 'vue'
 import type { ControlDef } from '~/showcase/registry'
 
 const props = defineProps<{
   componentName: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  component: any
   controls: ControlDef[]
   isDark?: boolean
 }>()
@@ -11,8 +13,6 @@ const props = defineProps<{
 const values = ref<Record<string, any>>(
   Object.fromEntries(props.controls.map(c => [c.prop, c.default]))
 )
-
-const component = resolveComponent(props.componentName)
 
 const componentProps = computed(() =>
   Object.fromEntries(
@@ -110,7 +110,7 @@ const showCode = ref(false)
           <polyline points="16 18 22 12 16 6" />
           <polyline points="8 6 2 12 8 18" />
         </svg>
-        {{ showCode ? 'Masquer le code' : 'Voir le code' }}
+        {{ showCode ? 'Hide code' : 'View code' }}
       </button>
     </div>
 

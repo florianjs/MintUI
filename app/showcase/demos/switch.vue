@@ -1,7 +1,7 @@
 <template>
   <div class="space-y-4">
-    <UiSwitch label="Activer les notifications" />
-    <UiSwitch label="Mode sombre" />
-    <UiSwitch label="Désactivé" :disabled="true" />
+    <UiSwitch label="Enable notifications" />
+    <UiSwitch label="Dark mode" />
+    <UiSwitch label="Disabled" :disabled="true" />
   </div>
 </template>

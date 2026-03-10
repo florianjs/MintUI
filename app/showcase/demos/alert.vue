@@ -1,8 +1,8 @@
 <template>
   <div class="space-y-3">
-    <UiAlert title="Information" description="Une information importante à lire." />
-    <UiAlert variant="success" title="Succès" description="L'opération s'est déroulée correctement." />
-    <UiAlert variant="warning" title="Attention" description="Vérifiez les paramètres avant de continuer." />
-    <UiAlert variant="destructive" title="Erreur" description="Une erreur est survenue, veuillez réessayer." />
+    <UiAlert title="Information" description="Important information to read." />
+    <UiAlert variant="success" title="Success" description="The operation completed successfully." />
+    <UiAlert variant="warning" title="Warning" description="Check settings before continuing." />
+    <UiAlert variant="destructive" title="Error" description="An error occurred, please try again." />
   </div>
 </template>
